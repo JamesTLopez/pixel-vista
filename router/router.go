@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 	"pixelvista/handler"
+	"pixelvista/helpers"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -23,7 +24,7 @@ func Routes() http.Handler {
 
 	// Views
 	router.Group(func(r chi.Router) {
-		r.Get("/", handler.HandleHomeIndex)
+		r.Get("/", helpers.GenerateHandler(handler.HandleHomeIndex))
 	})
 
 	return router
