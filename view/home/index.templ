@@ -1,5 +1,9 @@
 package home
 
+import "pixelvista/view/layout"
+
 templ Index() {
-	<div><p>Hello from PixelVista</p></div>
+	@layout.App(true) {
+		<div class="text-red-500"><p>Hello from PixelVista</p></div>
+	}
 }

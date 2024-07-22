@@ -1,6 +1,7 @@
-package router
+package routes
 
 import (
+	"embed"
 	"net/http"
 	"pixelvista/handler"
 	"pixelvista/helpers"
@@ -10,8 +11,9 @@ import (
 	"github.com/go-chi/cors"
 )
 
-func Routes() http.Handler {
+func InitRoutes(FS embed.FS) http.Handler {
 	router := chi.NewRouter()
+
 	router.Use(middleware.Recoverer)
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"http://*", "https://*"}, // TODO: for security, change such that it targets published origins
@@ -21,6 +23,8 @@ func Routes() http.Handler {
 		AllowCredentials: true,
 		MaxAge:           3000,
 	}))
+
+	router.Handle("/*", http.StripPrefix("/", http.FileServer(http.FS(FS))))
 
 	// Views
 	router.Group(func(r chi.Router) {

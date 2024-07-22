@@ -1,12 +1,14 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"log"
 	"log/slog"
 	"net/http"
 	"os"
-	"pixelvista/router"
+
+	"pixelvista/routes"
 
 	"github.com/joho/godotenv"
 )
@@ -19,20 +21,10 @@ type Application struct {
 	Config Config
 }
 
-func (app *Application) Serve() error {
-	port := os.Getenv("PORT")
-	slog.Info("Started application...", "port", port)
-
-	server := &http.Server{
-		Addr:    fmt.Sprintf(":%s", port),
-		Handler: router.Routes(),
-	}
-
-	return server.ListenAndServe()
-}
-
 func main() {
-	if err := initPixelVista(); err != nil {
+	err := godotenv.Load()
+
+	if err != nil {
 		log.Fatal(err)
 	}
 
@@ -44,19 +36,24 @@ func main() {
 		Config: cfg,
 	}
 
-	err := app.Serve()
+	err = app.Serve()
 
 	if err != nil {
 		log.Fatal("Error starting server: ", err)
 	}
 }
 
-func initPixelVista() error {
-	err := godotenv.Load()
+//go:embed public
+var FS embed.FS
 
-	if err != nil {
-		return err
+func (app *Application) Serve() error {
+	port := os.Getenv("PORT")
+	slog.Info("Started application...", "port", port)
+
+	server := &http.Server{
+		Addr:    fmt.Sprintf(":%s", port),
+		Handler: routes.InitRoutes(FS),
 	}
 
-	return nil
+	return server.ListenAndServe()
 }
