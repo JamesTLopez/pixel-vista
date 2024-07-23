@@ -31,8 +31,8 @@ func InitRoutes(FS embed.FS) http.Handler {
 
 	// Views
 	router.Group(func(r chi.Router) {
-
-		r.Get("/", helpers.GenerateHandler(page.HandleHomeIndex))
+		r.Get("/", helpers.GenerateHandler(page.HandlerSigninIndex))
+		r.Get("/dashboard", helpers.GenerateHandler(page.HandleHomeIndex))
 	})
 
 	return router

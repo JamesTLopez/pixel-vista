@@ -16,6 +16,10 @@ func WithUser(next http.Handler) http.Handler {
 		}
 
 		user := internal.GetAuthenticatedUser(r)
+		// user := types.AuthenticatedUser{
+		// 	Email:    "test1@gmail.com",
+		// 	LoggedIn: true,
+		// }
 		ctx := context.WithValue(r.Context(), types.Userkey, user)
 
 		next.ServeHTTP(w, r.WithContext(ctx))

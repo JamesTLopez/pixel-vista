@@ -2,7 +2,7 @@ package page
 
 import (
 	"net/http"
-	"pixelvista/view/home"
+	"pixelvista/view/pages/home"
 )
 
 func HandleHomeIndex(w http.ResponseWriter, r *http.Request) error {

@@ -1,5 +1,7 @@
 package components
 
+import "pixelvista/view"
+
 templ Navigation() {
 	<div class="navbar bg-base-200">
 		<div class="navbar-start">
@@ -34,6 +36,9 @@ templ Navigation() {
 			<a class="btn btn-ghost text-xl">PixelVista</a>
 		</div>
 		<div class="navbar-end">
+			if view.GetAuthenticatedUser(ctx).LoggedIn {
+				<h1>{ view.GetAuthenticatedUser(ctx).Email }</h1>
+			}
 			<button class="btn btn-ghost btn-circle">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
