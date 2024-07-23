@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"pixelvista/routes"
+	"pixelvista/internal/routes"
 
 	"github.com/joho/godotenv"
 )
