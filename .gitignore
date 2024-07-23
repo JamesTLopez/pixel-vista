@@ -3,5 +3,5 @@ bin
 *_templ.go*
 node_modules
 vendor
-
+tmp
 # public/styles.css

@@ -31,3 +31,6 @@ migration:
 
 seed:
 	@go run cmd/seed/main.go
+
+dev:
+	@air
