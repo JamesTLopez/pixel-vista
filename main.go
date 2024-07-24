@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"pixelvista/internal/routes"
+	superb "pixelvista/pkg/db"
 
 	"github.com/joho/godotenv"
 )
@@ -22,9 +23,7 @@ type Application struct {
 }
 
 func main() {
-	err := godotenv.Load()
-
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
 
@@ -36,9 +35,9 @@ func main() {
 		Config: cfg,
 	}
 
-	err = app.Serve()
+	superb.SbInit()
 
-	if err != nil {
+	if err := app.Serve(); err != nil {
 		log.Fatal("Error starting server: ", err)
 	}
 }
