@@ -4,8 +4,8 @@ import (
 	"embed"
 	"net/http"
 	"pixelvista/helpers"
+	"pixelvista/internal/handler"
 	"pixelvista/internal/middleware"
-	"pixelvista/internal/page"
 
 	"github.com/go-chi/chi/v5"
 	chiMiddle "github.com/go-chi/chi/v5/middleware"
@@ -31,8 +31,13 @@ func InitRoutes(FS embed.FS) http.Handler {
 
 	// Views
 	router.Group(func(r chi.Router) {
-		r.Get("/", helpers.GenerateHandler(page.HandlerSigninIndex))
-		r.Get("/dashboard", helpers.GenerateHandler(page.HandleHomeIndex))
+		r.Get("/", helpers.GenerateHandler(handler.HandlerSigninIndex))
+		r.Get("/dashboard", helpers.GenerateHandler(handler.HandleHomeIndex))
+	})
+
+	// endpoints
+	router.Group(func(r chi.Router) {
+		r.Post("/login", helpers.GenerateHandler(handler.LoginCreate))
 	})
 
 	return router
