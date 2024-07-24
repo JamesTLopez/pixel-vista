@@ -1,6 +1,9 @@
 package auth
 
-import "pixelvista/view/layout"
+import (
+	"github.com/nedpals/supabase-go"
+	"pixelvista/view/layout"
+)
 
 templ Signin() {
 	@layout.App(false) {
@@ -29,24 +32,29 @@ templ Signin() {
 						<h1 class="text-xl font-semibold text-neutral montserrat">Welcome!</h1>
 						<h1 class="text-xl font-semibold text-neutral montserrat">Login to Pixel Vista</h1>
 					</div>
-					@LoginForm()
+					@LoginForm(supabase.UserCredentials{}, LoginErrors{})
 				</div>
 			</div>
 		</div>
 	}
 }
 
-templ LoginForm() {
+type LoginErrors struct {
+	Email       string
+	Password    string
+	InvalidCred string
+}
+
+templ LoginForm(creds supabase.UserCredentials, errors LoginErrors) {
 	<form
 		class="w-full h-full flex flex-col"
 		hx-post="/login"
-		hx-swap="outerHTML"
 	>
 		<label class="form-control w-full">
 			<div class="label">
 				<span class="label-text montserrat">Email address</span>
 			</div>
-			<input type="email" name="email" placeholder="example@gmail.com" class="input input-bordered w-full"/>
+			<input type="email" value={ creds.Email } name="email" placeholder="example@gmail.com" class="input input-bordered w-full"/>
 		</label>
 		<label class="form-control w-full">
 			<div class="label">
@@ -54,6 +62,11 @@ templ LoginForm() {
 			</div>
 			<input type="password" name="password" required placeholder="*********" class="input input-bordered w-full"/>
 		</label>
+		<div class="flex justify-start items-center mt-10 min-h-10">
+			if len(errors.InvalidCred) > 0 {
+				<label class="text-error font-normal">{ errors.InvalidCred }</label>
+			}
+		</div>
 		<button class="mt-8 btn btn-accent text-base-100">Login</button>
 	</form>
 }
