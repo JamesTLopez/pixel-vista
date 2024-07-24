@@ -12,8 +12,11 @@ templ App(nav bool) {
 			<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 			<script src="https://unpkg.com/htmx.org@1.9.9" defer></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+			<link rel="preconnect" href="https://fonts.googleapis.com"/>
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+			<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&family=Pridi:wght@200;300;400;500;600;700&display=swap" rel="stylesheet"/>
 		</head>
-		<body class="antialiased">
+		<body class="antialiased pridi">
 			if nav {
 				@components.Navigation()
 			}
