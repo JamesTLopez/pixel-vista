@@ -7,8 +7,8 @@ import (
 	"pixelvista/internal/middleware"
 	"pixelvista/internal/page"
 
-	"github.com/go-chi/chi"
-	chiMiddle "github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	chiMiddle "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 )
 
