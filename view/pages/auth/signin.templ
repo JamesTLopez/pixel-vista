@@ -31,9 +31,9 @@ templ Signin() {
 					<div class="flex flex-col justify-center items-center p-8">
 						<h1 class="text-xl font-semibold text-neutral montserrat">Welcome!</h1>
 					</div>
-					@LoginForm(supabase.UserCredentials{}, LoginErrors{})
 				</div>
 			</div>
+			@LoginForm(supabase.UserCredentials{}, LoginErrors{})
 		</div>
 	}
 }
@@ -46,8 +46,9 @@ type LoginErrors struct {
 
 templ LoginForm(creds supabase.UserCredentials, errors LoginErrors) {
 	<form
-		class="w-full h-full flex flex-col"
 		hx-post="/login"
+		hx-swap="outerHTML"
+		class="w-full h-full flex flex-col"
 	>
 		<label class="form-control w-full">
 			<div class="label">

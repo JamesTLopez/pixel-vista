@@ -46,11 +46,8 @@ func LoginCreate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	http.SetCookie(w, cookie)
-	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
-
-	return renderComponent(w, r, auth.LoginForm(credentials, auth.LoginErrors{
-		InvalidCred: "Something went wrong. Please try again",
-	}))
+	hxRedirect(w, r, "/dashboard")
+	return nil
 }
 
 // func RegisterCreate(w http.ResponseWriter, r *http.Request) error {
