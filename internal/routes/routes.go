@@ -31,8 +31,9 @@ func InitRoutes(FS embed.FS) http.Handler {
 
 	// Views
 	router.Group(func(r chi.Router) {
-		r.Get("/", internal.GenerateHandler(handler.HandlerSigninIndex))
+		r.Get("/login", internal.GenerateHandler(handler.HandlerSigninIndex))
 		r.Get("/dashboard", internal.GenerateHandler(handler.HandleHomeIndex))
+		r.Get("/register", internal.GenerateHandler(handler.HandlerRegisterIndex))
 	})
 
 	// endpoints

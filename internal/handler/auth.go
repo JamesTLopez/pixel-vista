@@ -6,16 +6,15 @@ import (
 	"pixelvista/internal/sb"
 	"pixelvista/view/pages/auth"
 
-	"github.com/a-h/templ"
 	"github.com/nedpals/supabase-go"
 )
 
-func renderComponent(w http.ResponseWriter, r *http.Request, component templ.Component) error {
-	return component.Render(r.Context(), w)
-}
-
 func HandlerSigninIndex(w http.ResponseWriter, r *http.Request) error {
 	return auth.Signin().Render(r.Context(), w)
+}
+
+func HandlerRegisterIndex(w http.ResponseWriter, r *http.Request) error {
+	return auth.Register().Render(r.Context(), w)
 }
 
 func LoginCreate(w http.ResponseWriter, r *http.Request) error {
