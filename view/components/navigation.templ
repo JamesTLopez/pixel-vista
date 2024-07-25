@@ -36,8 +36,10 @@ templ Navigation() {
 			<a class="btn btn-ghost text-xl">PixelVista</a>
 		</div>
 		<div class="navbar-end">
-			if view.GetAuthenticatedUser(ctx).LoggedIn {
-				<h1>{ view.GetAuthenticatedUser(ctx).Email }</h1>
+			if view.AuthenticatedUser(ctx).LoggedIn {
+				<h1>{ view.AuthenticatedUser(ctx).Email }</h1>
+			} else {
+				<h1>Notloggedin</h1>
 			}
 			<button class="btn btn-ghost btn-circle">
 				<svg

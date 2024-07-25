@@ -31,9 +31,9 @@ templ Signin() {
 					<div class="flex flex-col justify-center items-center p-8">
 						<h1 class="text-xl font-semibold text-neutral montserrat">Welcome!</h1>
 					</div>
+					@LoginForm(supabase.UserCredentials{}, LoginErrors{})
 				</div>
 			</div>
-			@LoginForm(supabase.UserCredentials{}, LoginErrors{})
 		</div>
 	}
 }

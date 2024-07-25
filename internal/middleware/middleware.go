@@ -3,7 +3,6 @@ package middleware
 import (
 	"context"
 	"net/http"
-	"pixelvista/internal"
 	"pixelvista/types"
 	"strings"
 )
@@ -15,13 +14,8 @@ func WithUser(next http.Handler) http.Handler {
 			return
 		}
 
-		user := internal.GetAuthenticatedUser(r)
-		// user := types.AuthenticatedUser{
-		// 	Email:    "test1@gmail.com",
-		// 	LoggedIn: true,
-		// }
+		user := types.AuthenticatedUser{}
 		ctx := context.WithValue(r.Context(), types.Userkey, user)
-
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 
