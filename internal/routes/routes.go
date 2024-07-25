@@ -3,7 +3,7 @@ package routes
 import (
 	"embed"
 	"net/http"
-	"pixelvista/helpers"
+	"pixelvista/internal"
 	"pixelvista/internal/handler"
 	"pixelvista/internal/middleware"
 
@@ -31,13 +31,13 @@ func InitRoutes(FS embed.FS) http.Handler {
 
 	// Views
 	router.Group(func(r chi.Router) {
-		r.Get("/", helpers.GenerateHandler(handler.HandlerSigninIndex))
-		r.Get("/dashboard", helpers.GenerateHandler(handler.HandleHomeIndex))
+		r.Get("/", internal.GenerateHandler(handler.HandlerSigninIndex))
+		r.Get("/dashboard", internal.GenerateHandler(handler.HandleHomeIndex))
 	})
 
 	// endpoints
 	router.Group(func(r chi.Router) {
-		r.Post("/login", helpers.GenerateHandler(handler.LoginCreate))
+		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
 	})
 
 	return router
