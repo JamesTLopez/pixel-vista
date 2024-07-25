@@ -2,20 +2,33 @@ package auth
 
 import "pixelvista/view/layout"
 
+type RegisterParams struct {
+	Email           string
+	Password        string
+	ConfirmPassword string
+}
+
+type RegisterErrors struct {
+	Email           string
+	Password        string
+	ConfirmPassword string
+}
+
 templ Register() {
 	@layout.App(false) {
 		<div class="flex flex-col min-h-screen justify-center items-center bg-base-200">
 			<div class="flex justify-center items-center min-h-[475px] h-full shadow-lg rounded-lg w-full max-w-[600px] bg-base-100 p-8">
-				@RegisterForm()
+				@RegisterForm(RegisterParams{}, RegisterErrors{})
 			</div>
 		</div>
 	}
 }
 
-templ RegisterForm() {
+templ RegisterForm(params RegisterParams, errors RegisterErrors) {
 	<form
 		class="w-full h-full flex flex-col"
 		hx-post="/signup"
+		hx-swap="outerHTML"
 	>
 		<div>
 			<div class="flex flex-col items-center w-full gap-4">
@@ -36,13 +49,13 @@ templ RegisterForm() {
 			<div class="label">
 				<span class="label-text montserrat">Password</span>
 			</div>
-			<input type="password" name="password" required placeholder="*********" class="input input-bordered w-full"/>
+			<input type="password" name="password" required class="input input-bordered w-full"/>
 		</label>
 		<label class="form-control w-full">
 			<div class="label">
 				<span class="label-text montserrat">Confirm Password</span>
 			</div>
-			<input type="password" name="password" required placeholder="*********" class="input input-bordered w-full"/>
+			<input type="password" name="confirmPassword" required class="input input-bordered w-full"/>
 		</label>
 		<div class="ml-0 pl-0">
 			<a href="/login" class="btn btn-link pl-0 ml-0">Already have an account? Login here!</a>

@@ -52,3 +52,12 @@ func LoginCreate(w http.ResponseWriter, r *http.Request) error {
 		InvalidCred: "Something went wrong. Please try again",
 	}))
 }
+
+// func RegisterCreate(w http.ResponseWriter, r *http.Request) error {
+// 	params := auth.RegisterParams{
+// 		Email:           r.FormValue("email"),
+// 		Password:        r.FormValue("password"),
+// 		ConfirmPassword: r.FormValue("confirmPassword"),
+// 	}
+
+// }
