@@ -55,6 +55,9 @@ templ LoginForm(creds supabase.UserCredentials, errors LoginErrors) {
 				<span class="label-text montserrat">Email address</span>
 			</div>
 			<input type="email" value={ creds.Email } name="email" placeholder="example@gmail.com" class="input input-bordered w-full"/>
+			if len(errors.Email) > 0 {
+				<label class="text-error font-light">{ errors.Email }</label>
+			}
 		</label>
 		<label class="form-control w-full">
 			<div class="label">
@@ -62,11 +65,33 @@ templ LoginForm(creds supabase.UserCredentials, errors LoginErrors) {
 			</div>
 			<input type="password" name="password" required placeholder="*********" class="input input-bordered w-full"/>
 		</label>
-		<div class="flex justify-start items-center mt-10 min-h-10">
+		<div class="flex justify-start items-center mt-10">
 			if len(errors.InvalidCred) > 0 {
-				<label class="text-error font-normal">{ errors.InvalidCred }</label>
+				<label class="text-error font-light">{ errors.InvalidCred }</label>
 			}
 		</div>
+		<button class="mt-8 btn btn-accent text-base-100">Login</button>
+	</form>
+}
+
+templ RegisterForm() {
+	<form
+		class="w-full h-full flex flex-col"
+		hx-post="/login"
+	>
+		<label class="form-control w-full">
+			<div class="label">
+				<span class="label-text montserrat">Email address</span>
+			</div>
+			<input type="email" name="email" placeholder="example@gmail.com" class="input input-bordered w-full"/>
+		</label>
+		<label class="form-control w-full">
+			<div class="label">
+				<span class="label-text montserrat">Password</span>
+			</div>
+			<input type="password" name="password" required placeholder="*********" class="input input-bordered w-full"/>
+		</label>
+		<div class="flex justify-start items-center mt-10"></div>
 		<button class="mt-8 btn btn-accent text-base-100">Login</button>
 	</form>
 }

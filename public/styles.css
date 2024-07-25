@@ -2174,10 +2174,6 @@ html {
   height: 100%;
 }
 
-.min-h-10 {
-  min-height: 2.5rem;
-}
-
 .min-h-\[475px\] {
   min-height: 475px;
 }
@@ -2316,6 +2312,14 @@ html {
 
 .font-semibold {
   font-weight: 600;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
 }
 
 .tracking-tighter {

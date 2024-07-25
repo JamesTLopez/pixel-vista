@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"os"
 
-	superb "pixelvista/internal/db"
 	"pixelvista/internal/routes"
+	superb "pixelvista/internal/sb"
 
 	"github.com/joho/godotenv"
 )

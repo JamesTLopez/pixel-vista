@@ -4,4 +4,4 @@ bin
 node_modules
 vendor
 tmp
-# public/styles.css
+public/styles.css
