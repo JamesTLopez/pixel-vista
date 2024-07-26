@@ -27,7 +27,7 @@ templ Register() {
 templ RegisterForm(params RegisterParams, errors RegisterErrors) {
 	<form
 		class="w-full h-full flex flex-col"
-		hx-post="/signup"
+		hx-post="/register"
 		hx-swap="outerHTML"
 	>
 		<div>
@@ -44,6 +44,9 @@ templ RegisterForm(params RegisterParams, errors RegisterErrors) {
 				<span class="label-text montserrat">Email address</span>
 			</div>
 			<input type="email" name="email" placeholder="example@gmail.com" class="input input-bordered w-full"/>
+			if len(errors.Email) > 0 {
+				<label class="text-error font-light">{ errors.Email }</label>
+			}
 		</label>
 		<label class="form-control w-full">
 			<div class="label">
@@ -57,9 +60,23 @@ templ RegisterForm(params RegisterParams, errors RegisterErrors) {
 			</div>
 			<input type="password" name="confirmPassword" required class="input input-bordered w-full"/>
 		</label>
+		<div>
+			if len(errors.Password) > 0 {
+				<label class="text-error font-light">{ errors.Password }</label>
+			}
+			if len(errors.ConfirmPassword) > 0 {
+				<label class="text-error font-light">{ errors.ConfirmPassword }</label>
+			}
+		</div>
 		<div class="ml-0 pl-0">
 			<a href="/login" class="btn btn-link pl-0 ml-0">Already have an account? Login here!</a>
 		</div>
 		<button class="mt-8 btn btn-accent text-base-100">Sign Up</button>
 	</form>
+}
+
+templ RegisterSuccess(email string) {
+	<div>
+		A confirmation email has been sent to: <span class="text-success">{ email }</span>
+	</div>
 }
