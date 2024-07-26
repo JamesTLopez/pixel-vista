@@ -1,0 +1,14 @@
+package auth
+
+import "pixelvista/view/layout"
+
+templ Callback() {
+	@layout.App(false) {
+		<div class="min-h-screen flex justify-center items-center">
+			<div class="flex flex-col justify-center items-center">
+				<h1>Redirecting you to the application</h1>
+				<span class="loading loading-dots loading-lg"></span>
+			</div>
+		</div>
+	}
+}

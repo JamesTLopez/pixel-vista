@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"pixelvista/helpers/validation"
 	"pixelvista/internal/sb"
@@ -13,9 +12,11 @@ import (
 func HandlerSigninIndex(w http.ResponseWriter, r *http.Request) error {
 	return auth.Signin().Render(r.Context(), w)
 }
-
 func HandlerRegisterIndex(w http.ResponseWriter, r *http.Request) error {
 	return auth.Register().Render(r.Context(), w)
+}
+func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
+	return auth.Callback().Render(r.Context(), w)
 }
 
 func LoginCreate(w http.ResponseWriter, r *http.Request) error {
@@ -57,7 +58,7 @@ func RegisterCreate(w http.ResponseWriter, r *http.Request) error {
 		Password:        r.FormValue("password"),
 		ConfirmPassword: r.FormValue("confirmPassword"),
 	}
-	fmt.Println(params)
+
 	errors := auth.RegisterErrors{}
 
 	if ok := validation.New(&params, validation.Fields{
