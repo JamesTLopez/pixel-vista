@@ -16,7 +16,13 @@ func HandlerRegisterIndex(w http.ResponseWriter, r *http.Request) error {
 	return auth.Register().Render(r.Context(), w)
 }
 func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
-	return auth.Callback().Render(r.Context(), w)
+	accessToken := r.URL.Query().Get("access_token")
+
+	if len(accessToken) == 0 {
+		return renderComponent(w, r, auth.CallbackScript())
+	}
+
+	return nil
 }
 
 func LoginCreate(w http.ResponseWriter, r *http.Request) error {
@@ -39,16 +45,7 @@ func LoginCreate(w http.ResponseWriter, r *http.Request) error {
 		}))
 	}
 
-	cookie := &http.Cookie{
-		Value:    resp.AccessToken,
-		Name:     "at",
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   true,
-	}
-
-	http.SetCookie(w, cookie)
-	hxRedirect(w, r, "/dashboard")
+	hxRedirect(w, r, "/auth/callback"+"?"+"access_token="+resp.AccessToken)
 	return nil
 }
 
@@ -70,10 +67,21 @@ func RegisterCreate(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	resp, err := sb.Client.Auth.SignUp(r.Context(), supabase.UserCredentials{Email: params.Email, Password: params.Password})
-
 	if err != nil {
 		return err
 	}
 
 	return renderComponent(w, r, auth.RegisterSuccess(resp.Email))
+}
+
+func setAuthCookie(w http.ResponseWriter, accessToken string) {
+	cookie := &http.Cookie{
+		Value:    accessToken,
+		Name:     "access_token",
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   true,
+	}
+
+	http.SetCookie(w, cookie)
 }
