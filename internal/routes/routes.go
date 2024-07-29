@@ -40,6 +40,7 @@ func InitRoutes(FS embed.FS) http.Handler {
 	router.Group(func(r chi.Router) {
 		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
 		r.Post("/register", internal.GenerateHandler(handler.RegisterCreate))
+		r.Post("/logout", internal.GenerateHandler(handler.Logout))
 	})
 
 	return router

@@ -82,6 +82,22 @@ func RegisterCreate(w http.ResponseWriter, r *http.Request) error {
 	return renderComponent(w, r, auth.RegisterSuccess(resp.Email))
 }
 
+func Logout(w http.ResponseWriter, r *http.Request) error {
+
+	cookie := http.Cookie{
+		Value:    "",
+		Name:     "access_token",
+		MaxAge:   -1,
+		HttpOnly: true,
+		Path:     "/",
+		Secure:   true,
+	}
+
+	http.SetCookie(w, &cookie)
+	hxRedirect(w, r, "/login")
+	return nil
+}
+
 func setAuthCookie(w http.ResponseWriter, accessToken string) {
 	cookie := &http.Cookie{
 		Value:    accessToken,
