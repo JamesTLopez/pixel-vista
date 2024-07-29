@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"net/http"
+	"pixelvista/internal"
 	"pixelvista/internal/sb"
 	"pixelvista/types"
 	"strings"
@@ -38,5 +39,22 @@ func WithUser(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 
+	return http.HandlerFunc(fn)
+}
+func WithAuth(next http.Handler) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+
+		if strings.Contains(r.URL.Path, "/public") {
+			next.ServeHTTP(w, r)
+			return
+		}
+		user := internal.GetAuthenticatedUser(r)
+		if !user.LoggedIn {
+			path := r.URL.Path
+			http.Redirect(w, r, "/login?to="+path, http.StatusSeeOther)
+			return
+		}
+		next.ServeHTTP(w, r)
+	}
 	return http.HandlerFunc(fn)
 }

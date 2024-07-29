@@ -34,7 +34,13 @@ func InitRoutes(FS embed.FS) http.Handler {
 		r.Get("/dashboard", internal.GenerateHandler(handler.HandleHomeIndex))
 		r.Get("/register", internal.GenerateHandler(handler.HandlerRegisterIndex))
 		r.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
-		r.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
+
+		// Protected views
+		r.Group(func(auth chi.Router) {
+			auth.Use(middleware.WithAuth)
+			auth.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
+
+		})
 	})
 
 	// endpoints
