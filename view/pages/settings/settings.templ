@@ -1,0 +1,15 @@
+package settings
+
+import (
+	"pixelvista/types"
+	"pixelvista/view/layout"
+)
+
+templ SettingsIndex(user types.AuthenticatedUser) {
+	@layout.App(true) {
+		<div>
+			Settings Page
+			{ user.Email }
+		</div>
+	}
+}
