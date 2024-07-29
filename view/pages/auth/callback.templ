@@ -2,7 +2,7 @@ package auth
 
 import "pixelvista/view/layout"
 
-templ Callback() {
+templ CallbackScript() {
 	@layout.App(false) {
 		<div class="min-h-screen flex justify-center items-center">
 			<div class="flex flex-col justify-center items-center">
@@ -10,13 +10,22 @@ templ Callback() {
 				<span class="loading loading-dots loading-lg"></span>
 			</div>
 		</div>
-	}
-}
-
-templ CallbackScript() {
-	<script>
+		<script>
 		var url = window.location.href;
 		var newURL = url.replace("#", "?")
 		window.location = newURL
 	</script>
+	}
+}
+
+templ ErrorRegister() {
+	@layout.App(false) {
+		<div class="min-h-screen flex justify-center items-center">
+			<div class="flex flex-col justify-center items-center">
+				<h1 class="text-error font-medium text-lg">Oops! Something went wrong!</h1>
+				<p class="text-error font-normal">Please try logging in again here...</p>
+				<a class="" href="/login">Back to Login</a>
+			</div>
+		</div>
+	}
 }

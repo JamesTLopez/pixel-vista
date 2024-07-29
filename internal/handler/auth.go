@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"pixelvista/helpers/validation"
 	"pixelvista/internal/sb"
@@ -17,10 +18,20 @@ func HandlerRegisterIndex(w http.ResponseWriter, r *http.Request) error {
 }
 func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
 	accessToken := r.URL.Query().Get("access_token")
+	err := r.URL.Query().Get("error")
+
+	if err != "" {
+		return renderComponent(w, r, auth.ErrorRegister())
+	}
 
 	if len(accessToken) == 0 {
+		fmt.Println("hehe oh shit loop")
+
 		return renderComponent(w, r, auth.CallbackScript())
 	}
+	fmt.Println("hehe")
+	setAuthCookie(w, accessToken)
+	hxRedirect(w, r, "/dashboard")
 
 	return nil
 }
@@ -44,8 +55,8 @@ func LoginCreate(w http.ResponseWriter, r *http.Request) error {
 			InvalidCred: "Invalid credentials, please try again",
 		}))
 	}
-
-	hxRedirect(w, r, "/auth/callback"+"?"+"access_token="+resp.AccessToken)
+	setAuthCookie(w, resp.AccessToken)
+	hxRedirect(w, r, "/dashboard")
 	return nil
 }
 
