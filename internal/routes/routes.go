@@ -2,10 +2,12 @@ package routes
 
 import (
 	"embed"
+	"fmt"
 	"net/http"
 	"pixelvista/internal"
 	"pixelvista/internal/handler"
 	"pixelvista/internal/middleware"
+	"pixelvista/internal/session"
 
 	"github.com/go-chi/chi/v5"
 	chiMiddle "github.com/go-chi/chi/v5/middleware"
@@ -17,6 +19,7 @@ func InitRoutes(FS embed.FS) http.Handler {
 
 	router.Use(chiMiddle.Recoverer)
 	router.Use(middleware.WithUser)
+	router.Use(session.SessionManager.LoadAndSave)
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"http://*", "https://*"}, // TODO: for security, change such that it targets published origins
 		AllowedMethods:   []string{"GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"},
@@ -51,4 +54,12 @@ func InitRoutes(FS embed.FS) http.Handler {
 	})
 
 	return router
+}
+
+func getHandler(w http.ResponseWriter, r *http.Request) {
+
+	msg := session.SessionManager.Keys(r.Context())
+
+	fmt.Println("yeet-", msg)
+	// io.WriteString(w, msg)
 }

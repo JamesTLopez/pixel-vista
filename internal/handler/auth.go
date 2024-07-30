@@ -5,6 +5,7 @@ import (
 	"os"
 	"pixelvista/helpers/validation"
 	"pixelvista/internal/sb"
+	"pixelvista/internal/session"
 	"pixelvista/view/pages/auth"
 
 	"github.com/nedpals/supabase-go"
@@ -28,7 +29,7 @@ func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
 
 		return renderComponent(w, r, auth.CallbackScript())
 	}
-	setAuthCookie(w, accessToken)
+	setAuthCookie(w, r, accessToken)
 	hxRedirect(w, r, "/dashboard")
 
 	return nil
@@ -73,7 +74,7 @@ func LoginCreate(w http.ResponseWriter, r *http.Request) error {
 			InvalidCred: "Invalid credentials, please try again",
 		}))
 	}
-	setAuthCookie(w, resp.AccessToken)
+	setAuthCookie(w, r, resp.AccessToken)
 	hxRedirect(w, r, "/dashboard")
 	return nil
 }
@@ -105,28 +106,11 @@ func RegisterCreate(w http.ResponseWriter, r *http.Request) error {
 
 func Logout(w http.ResponseWriter, r *http.Request) error {
 
-	cookie := http.Cookie{
-		Value:    "",
-		Name:     "access_token",
-		MaxAge:   -1,
-		HttpOnly: true,
-		Path:     "/",
-		Secure:   true,
-	}
-
-	http.SetCookie(w, &cookie)
+	session.SessionManager.Destroy(r.Context())
 	hxRedirect(w, r, "/login")
 	return nil
 }
 
-func setAuthCookie(w http.ResponseWriter, accessToken string) {
-	cookie := &http.Cookie{
-		Value:    accessToken,
-		Name:     "access_token",
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   true,
-	}
-
-	http.SetCookie(w, cookie)
+func setAuthCookie(w http.ResponseWriter, r *http.Request, accessToken string) {
+	session.SessionManager.Put(r.Context(), "accessToken", accessToken)
 }

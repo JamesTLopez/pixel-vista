@@ -10,6 +10,7 @@ require (
 )
 
 require (
+	github.com/alexedwards/scs/v2 v2.8.0
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/nedpals/supabase-go v0.4.0
 )

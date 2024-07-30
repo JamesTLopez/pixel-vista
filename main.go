@@ -10,19 +10,13 @@ import (
 
 	"pixelvista/internal/routes"
 	superb "pixelvista/internal/sb"
+	"pixelvista/internal/session"
 
 	"github.com/joho/godotenv"
 )
 
-type Config struct {
-	Port string
-}
-
-type Application struct {
-	Config Config
-}
-
 func main() {
+
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
@@ -35,6 +29,7 @@ func main() {
 		Config: cfg,
 	}
 
+	session.InitSession()
 	superb.SbInit()
 
 	if err := app.Serve(); err != nil {
@@ -55,4 +50,12 @@ func (app *Application) Serve() error {
 	}
 
 	return server.ListenAndServe()
+}
+
+type Config struct {
+	Port string
+}
+
+type Application struct {
+	Config Config
 }
