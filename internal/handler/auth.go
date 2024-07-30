@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"os"
 	"pixelvista/helpers/validation"
 	"pixelvista/internal/sb"
 	"pixelvista/view/pages/auth"
@@ -29,6 +30,26 @@ func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
 	}
 	setAuthCookie(w, accessToken)
 	hxRedirect(w, r, "/dashboard")
+
+	return nil
+}
+func HandleLoginGoogleIndex(w http.ResponseWriter, r *http.Request) error {
+	redirectUrl := os.Getenv("REDIRECT_URL")
+
+	if redirectUrl == "" {
+		return nil
+	}
+
+	res, err := sb.Client.Auth.SignInWithProvider(supabase.ProviderSignInOptions{
+		Provider:   "google",
+		RedirectTo: redirectUrl,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	http.Redirect(w, r, res.URL, http.StatusSeeOther)
 
 	return nil
 }
