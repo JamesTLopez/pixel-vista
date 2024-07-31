@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"pixelvista/internal"
 	"pixelvista/internal/sb"
+	"pixelvista/internal/session"
 	"pixelvista/types"
 	"strings"
 )
@@ -16,14 +17,15 @@ func WithUser(next http.Handler) http.Handler {
 			return
 		}
 
-		cookie, err := r.Cookie("access_token")
+		_, err := r.Cookie("pixel_vista")
 
 		if err != nil {
 			next.ServeHTTP(w, r)
 			return
 		}
+		access_token := session.SessionManager.GetString(r.Context(), "accessToken")
 
-		resp, err := sb.Client.Auth.User(r.Context(), cookie.Value)
+		resp, err := sb.Client.Auth.User(r.Context(), access_token)
 
 		if err != nil {
 			next.ServeHTTP(w, r)
