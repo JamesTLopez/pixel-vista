@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 
+	"pixelvista/db"
 	"pixelvista/internal/routes"
 	superb "pixelvista/internal/sb"
 	"pixelvista/internal/session"
@@ -32,6 +33,10 @@ func main() {
 	session.InitSession()
 	superb.SbInit()
 
+	if err := db.Init(); err != nil {
+		log.Fatal(err)
+
+	}
 	if err := app.Serve(); err != nil {
 		log.Fatal("Error starting server: ", err)
 	}

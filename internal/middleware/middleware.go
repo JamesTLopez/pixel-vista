@@ -8,6 +8,8 @@ import (
 	"pixelvista/internal/session"
 	"pixelvista/types"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 func WithUser(next http.Handler) http.Handler {
@@ -33,6 +35,7 @@ func WithUser(next http.Handler) http.Handler {
 		}
 
 		user := types.AuthenticatedUser{
+			ID:       uuid.MustParse(resp.ID),
 			Email:    resp.Email,
 			LoggedIn: true,
 		}

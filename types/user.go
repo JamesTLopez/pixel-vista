@@ -1,5 +1,7 @@
 package types
 
+import "github.com/google/uuid"
+
 type userKey string
 
 const (
@@ -8,6 +10,7 @@ const (
 )
 
 type AuthenticatedUser struct {
+	ID       uuid.UUID
 	Email    string
 	LoggedIn bool
 }

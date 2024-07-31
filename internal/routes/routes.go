@@ -2,7 +2,6 @@ package routes
 
 import (
 	"embed"
-	"fmt"
 	"net/http"
 	"pixelvista/internal"
 	"pixelvista/internal/handler"
@@ -59,12 +58,4 @@ func InitRoutes(FS embed.FS) http.Handler {
 	})
 
 	return router
-}
-
-func getHandler(w http.ResponseWriter, r *http.Request) {
-
-	msg := session.SessionManager.Keys(r.Context())
-
-	fmt.Println("yeet-", msg)
-	// io.WriteString(w, msg)
 }
