@@ -29,7 +29,7 @@ func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
 
 		return renderComponent(w, r, auth.CallbackScript())
 	}
-	setAuthCookie(w, r, accessToken)
+	setAuthCookie(r, accessToken)
 	hxRedirect(w, r, "/dashboard")
 
 	return nil
@@ -74,7 +74,7 @@ func LoginCreate(w http.ResponseWriter, r *http.Request) error {
 			InvalidCred: "Invalid credentials, please try again",
 		}))
 	}
-	setAuthCookie(w, r, resp.AccessToken)
+	setAuthCookie(r, resp.AccessToken)
 	hxRedirect(w, r, "/dashboard")
 	return nil
 }
@@ -111,6 +111,6 @@ func Logout(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func setAuthCookie(w http.ResponseWriter, r *http.Request, accessToken string) {
+func setAuthCookie(r *http.Request, accessToken string) {
 	session.SessionManager.Put(r.Context(), "accessToken", accessToken)
 }
