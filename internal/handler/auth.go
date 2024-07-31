@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 	"os"
-	"pixelvista/helpers/validation"
 	"pixelvista/internal/sb"
 	"pixelvista/internal/session"
+	"pixelvista/pkg/validation"
 	"pixelvista/view/pages/auth"
 
 	"github.com/nedpals/supabase-go"
