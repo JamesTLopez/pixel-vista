@@ -17,23 +17,14 @@ func HandlerSigninIndex(w http.ResponseWriter, r *http.Request) error {
 func HandlerRegisterIndex(w http.ResponseWriter, r *http.Request) error {
 	return auth.Register().Render(r.Context(), w)
 }
-func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
-	accessToken := r.URL.Query().Get("access_token")
-	err := r.URL.Query().Get("error")
+func HandlerAccountIndex(w http.ResponseWriter, r *http.Request) error {
+	return auth.AccountCreationPage().Render(r.Context(), w)
+}
 
-	if err != "" {
-		return renderComponent(w, r, auth.ErrorRegister())
-	}
-
-	if len(accessToken) == 0 {
-
-		return renderComponent(w, r, auth.CallbackScript())
-	}
-	setAuthCookie(r, accessToken)
-	hxRedirect(w, r, "/dashboard")
-
+func SetupAccountCreate(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
+
 func HandleLoginGoogleIndex(w http.ResponseWriter, r *http.Request) error {
 	redirectUrl := os.Getenv("REDIRECT_URL")
 
@@ -51,6 +42,24 @@ func HandleLoginGoogleIndex(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	http.Redirect(w, r, res.URL, http.StatusSeeOther)
+
+	return nil
+}
+
+func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
+	accessToken := r.URL.Query().Get("access_token")
+	err := r.URL.Query().Get("error")
+
+	if err != "" {
+		return renderComponent(w, r, auth.ErrorRegister())
+	}
+
+	if len(accessToken) == 0 {
+
+		return renderComponent(w, r, auth.CallbackScript())
+	}
+	setAuthCookie(r, accessToken)
+	hxRedirect(w, r, "/dashboard")
 
 	return nil
 }
