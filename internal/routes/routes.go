@@ -41,12 +41,16 @@ func InitRoutes(FS embed.FS) http.Handler {
 		r.Get("/register", internal.GenerateHandler(handler.HandlerRegisterIndex))
 		r.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
 		r.Get("/login/provider/google", internal.GenerateHandler(handler.HandleLoginGoogleIndex))
-		r.Get("/account/setup", internal.GenerateHandler(handler.HandlerAccountIndex))
 
 		// Protected views
+		r.Group(func(acc chi.Router) {
+			acc.Use(middleware.WithAccountSetup)
+			acc.Get("/", internal.GenerateHandler(handler.HandleHomeIndex))
+			acc.Get("/account/setup", internal.GenerateHandler(handler.HandlerAccountIndex))
+		})
+
 		r.Group(func(auth chi.Router) {
-			auth.Use(middleware.WithAccountSetup)
-			auth.Get("/", internal.GenerateHandler(handler.HandleHomeIndex))
+			auth.Use(middleware.WithAuth)
 			auth.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
 		})
 
