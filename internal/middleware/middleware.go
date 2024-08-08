@@ -70,6 +70,12 @@ func WithAuth(next http.Handler) http.Handler {
 func WithAccountSetup(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		user := internal.GetAuthenticatedUser(r)
+
+		if !user.LoggedIn {
+			next.ServeHTTP(w, r)
+			return
+		}
+
 		account, err := db.GetAccountGyUserID(user.ID)
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
