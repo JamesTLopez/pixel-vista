@@ -59,7 +59,7 @@ func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
 		return renderComponent(w, r, auth.CallbackScript())
 	}
 	setAuthCookie(r, accessToken)
-	hxRedirect(w, r, "/dashboard")
+	hxRedirect(w, r, "/")
 
 	return nil
 }
@@ -84,7 +84,7 @@ func LoginCreate(w http.ResponseWriter, r *http.Request) error {
 		}))
 	}
 	setAuthCookie(r, resp.AccessToken)
-	hxRedirect(w, r, "/dashboard")
+	hxRedirect(w, r, "/")
 	return nil
 }
 

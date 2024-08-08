@@ -38,17 +38,18 @@ func InitRoutes(FS embed.FS) http.Handler {
 	// Views
 	router.Group(func(r chi.Router) {
 		r.Get("/login", internal.GenerateHandler(handler.HandlerSigninIndex))
-		r.Get("/dashboard", internal.GenerateHandler(handler.HandleHomeIndex))
 		r.Get("/register", internal.GenerateHandler(handler.HandlerRegisterIndex))
 		r.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
 		r.Get("/login/provider/google", internal.GenerateHandler(handler.HandleLoginGoogleIndex))
 		r.Get("/account/setup", internal.GenerateHandler(handler.HandlerAccountIndex))
+
 		// Protected views
 		r.Group(func(auth chi.Router) {
-			auth.Use(middleware.WithAuth)
+			auth.Use(middleware.WithAccountSetup)
+			auth.Get("/", internal.GenerateHandler(handler.HandleHomeIndex))
 			auth.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
-
 		})
+
 	})
 
 	// endpoints

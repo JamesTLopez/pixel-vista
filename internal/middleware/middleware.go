@@ -2,7 +2,10 @@ package middleware
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"net/http"
+	"pixelvista/db"
 	"pixelvista/internal"
 	"pixelvista/internal/sb"
 	"pixelvista/internal/session"
@@ -64,18 +67,23 @@ func WithAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-// func WithAccountSetup(next http.Handler) http.Handler {
-// 	fn := func(w http.ResponseWriter, r *http.Request) {
-// 		user := internal.GetAuthenticatedUser(r)
-// 		account, err := db.GetAccountGyUserID(user.ID)
+func WithAccountSetup(next http.Handler) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		user := internal.GetAuthenticatedUser(r)
+		account, err := db.GetAccountGyUserID(user.ID)
+		if err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				http.Redirect(w, r, "/account/setup", http.StatusSeeOther)
+				return
+			}
+			next.ServeHTTP(w, r)
+			return
+		}
 
-// 		if !errors.Is(err, sql.ErrNoRows) {
-// 			http.Redirect(w, r, "/account/setup", http.StatusSeeOther)
-// 			return
-// 		}
-// 		user.Account = account
-// 		ctx := context.WithValue(r.Context(), types.Userkey, user)
-// 	}
+		user.Account = account
+		ctx := context.WithValue(r.Context(), types.Userkey, user)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	}
 
-// 	return http.HandlerFunc(fn)
-// }
+	return http.HandlerFunc(fn)
+}
