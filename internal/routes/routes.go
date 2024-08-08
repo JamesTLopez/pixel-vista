@@ -57,6 +57,7 @@ func InitRoutes(FS embed.FS) http.Handler {
 		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
 		r.Post("/register", internal.GenerateHandler(handler.RegisterCreate))
 		r.Post("/logout", internal.GenerateHandler(handler.Logout))
+		r.Post("/account/setup", internal.GenerateHandler(handler.SetupAccountCreate))
 	})
 
 	return router

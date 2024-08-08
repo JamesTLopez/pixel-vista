@@ -3,9 +3,12 @@ package handler
 import (
 	"net/http"
 	"os"
+	"pixelvista/db"
+	"pixelvista/internal"
 	"pixelvista/internal/sb"
 	"pixelvista/internal/session"
 	"pixelvista/pkg/validation"
+	"pixelvista/types"
 	"pixelvista/view/pages/auth"
 
 	"github.com/nedpals/supabase-go"
@@ -22,7 +25,32 @@ func HandlerAccountIndex(w http.ResponseWriter, r *http.Request) error {
 }
 
 func SetupAccountCreate(w http.ResponseWriter, r *http.Request) error {
-	return nil
+	params := auth.AccountSetupFormParams{
+		Username: r.FormValue("username"),
+	}
+
+	var errors auth.AccountSetupFormError
+	fields := validation.Fields{
+		"Username": validation.Rules(validation.Min(2), validation.Max(20)),
+	}
+
+	ok := validation.New(&params, fields).Validate(&errors)
+
+	if !ok {
+		return renderComponent(w, r, auth.AccountSetupForm(params, errors))
+	}
+
+	user := internal.GetAuthenticatedUser(r)
+	account := types.Account{
+		UserID:   user.ID,
+		Username: params.Username,
+	}
+
+	if err := db.CreateAccount(account); err != nil {
+		return err
+	}
+
+	return hxRedirect(w, r, "/")
 }
 
 func HandleLoginGoogleIndex(w http.ResponseWriter, r *http.Request) error {

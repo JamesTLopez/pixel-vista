@@ -10,28 +10,44 @@ templ AccountCreationPage() {
 					<h1 class="text-accent text-center font-medium">Hi there! Happy to see you here!</h1>
 					<h2 class="text-accent text-center font-normal">First things first, we are going to need to need some information!</h2>
 				</div>
-				<form class="h-full flex flex-col flex-1 justify-center w-2/3">
-					<label class="input input-bordered flex items-center gap-2 text-accent">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 16 16"
-							fill="currentColor"
-							class="h-4 w-4 opacity-70"
-						>
-							<path
-								d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z"
-							></path>
-						</svg>
-						<input type="text" required class="grow" placeholder="Username"/>
-					</label>
-					<div class="flex justify-start items-center mt-10">
-						// if len(errors.InvalidCred) > 0 {
-						// 	<label class="text-error font-light">{ errors.InvalidCred }</label>
-						// }
-					</div>
-					<button class="btn btn-accent text-base-100">Submit</button>
-				</form>
+				@AccountSetupForm(AccountSetupFormParams{}, AccountSetupFormError{})
 			</div>
 		</div>
 	}
+}
+
+type AccountSetupFormParams struct {
+	Username string
+}
+
+type AccountSetupFormError struct {
+	Username string
+}
+
+templ AccountSetupForm(params AccountSetupFormParams, errors AccountSetupFormError) {
+	<form
+		class="h-full flex flex-col flex-1 justify-center w-2/3"
+		hx-post="/account/setup"
+		hx-swap="outerHTML"
+	>
+		<label class="input input-bordered flex items-center gap-2 text-accent">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 16 16"
+				fill="currentColor"
+				class="h-4 w-4 opacity-70"
+			>
+				<path
+					d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z"
+				></path>
+			</svg>
+			<input type="text" required class="grow" placeholder="Username" name="username"/>
+		</label>
+		<div class="flex justify-start items-center mt-10">
+			if len(errors.Username) > 0 {
+				<label class="text-error font-light">{ errors.Username }</label>
+			}
+		</div>
+		<button class="btn btn-accent text-base-100">Submit</button>
+	</form>
 }
