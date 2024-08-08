@@ -63,3 +63,19 @@ func WithAuth(next http.Handler) http.Handler {
 	}
 	return http.HandlerFunc(fn)
 }
+
+// func WithAccountSetup(next http.Handler) http.Handler {
+// 	fn := func(w http.ResponseWriter, r *http.Request) {
+// 		user := internal.GetAuthenticatedUser(r)
+// 		account, err := db.GetAccountGyUserID(user.ID)
+
+// 		if !errors.Is(err, sql.ErrNoRows) {
+// 			http.Redirect(w, r, "/account/setup", http.StatusSeeOther)
+// 			return
+// 		}
+// 		user.Account = account
+// 		ctx := context.WithValue(r.Context(), types.Userkey, user)
+// 	}
+
+// 	return http.HandlerFunc(fn)
+// }
