@@ -21,3 +21,8 @@ func GetAccountGyUserID(id uuid.UUID) (types.Account, error) {
 	err := Bun.NewSelect().Model(&account).Where("user_id = ?", id).Scan(context.Background())
 	return account, err
 }
+
+func UpdateProfile(account *types.Account) error {
+	_, err := Bun.NewUpdate().Model(account).WherePK().Exec(context.Background())
+	return err
+}

@@ -44,24 +44,21 @@ func InitRoutes(FS embed.FS) http.Handler {
 
 		// Protected views
 		r.Group(func(acc chi.Router) {
-			acc.Use(middleware.WithAccountSetup)
+			acc.Use(middleware.WithAccountSetup, middleware.WithAuth)
 			acc.Get("/", internal.GenerateHandler(handler.HandleHomeIndex))
 			acc.Get("/account/setup", internal.GenerateHandler(handler.HandlerAccountIndex))
+			acc.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
 		})
-
-		r.Group(func(auth chi.Router) {
-			auth.Use(middleware.WithAuth)
-			auth.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
-		})
-
 	})
 
 	// endpoints
 	router.Group(func(r chi.Router) {
+		r.Use(middleware.WithAccountSetup, middleware.WithAuth)
 		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
 		r.Post("/register", internal.GenerateHandler(handler.RegisterCreate))
 		r.Post("/logout", internal.GenerateHandler(handler.Logout))
 		r.Post("/account/setup", internal.GenerateHandler(handler.SetupAccountCreate))
+		r.Put("/settings/account/profile", internal.GenerateHandler(handler.HandleSettingsProfileUpdate))
 	})
 
 	return router
