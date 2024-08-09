@@ -7,9 +7,87 @@ import (
 
 templ SettingsIndex(user types.AuthenticatedUser) {
 	@layout.App(true) {
-		<div>
-			Settings Page
-			{ user.Email }
-		</div>
+		@layout.Wrapper() {
+			<div class="flex flex-col lg:w-2/3 mx-auto prose">
+				@SettingsUpdateUsernameForm(UpdateUsernameParams{}, UpdateUsernameErrors{}, user)
+				@SettingsResetPasswordForm(UpdatePasswordParams{}, UpdatePasswordErrors{})
+			</div>
+		}
 	}
+}
+
+type UpdateUsernameParams struct {
+	Username string
+}
+
+type UpdateUsernameErrors struct {
+	Username string
+}
+
+templ SettingsUpdateUsernameForm(params UpdateUsernameParams, errors UpdateUsernameErrors, user types.AuthenticatedUser) {
+	<div>
+		<h3>Profile</h3>
+		<div class="divider"></div>
+		<form
+			class="flex flex-col w-full gap-4"
+			hx-post="/account/setup"
+			hx-swap="outerHTML"
+		>
+			<div class="grid grid-cols-3">
+				<label>Email Address</label>
+				<div class="col-span-2">
+					<input type="text" disabled value={ user.Email } class="input input-bordered w-full select-none"/>
+				</div>
+			</div>
+			<div class="grid grid-cols-3">
+				<label>Username</label>
+				<div class="col-span-2">
+					<input type="text" required name="username" class="input input-bordered w-full "/>
+				</div>
+			</div>
+			<div class="ml-auto">
+				<button class="btn btn-accent text-base-100">Update</button>
+			</div>
+		</form>
+	</div>
+}
+
+type UpdatePasswordParams struct {
+	Password        string
+	CurrentPassword string
+}
+
+type UpdatePasswordErrors struct {
+	Password        string
+	CurrentPassword string
+}
+
+templ SettingsResetPasswordForm(params UpdatePasswordParams, errprs UpdatePasswordErrors) {
+	<div>
+		<div>
+			<h3>Change Password</h3>
+			<div class="divider"></div>
+			<form
+				class="flex flex-col w-full gap-4"
+				hx-post="/account/setup"
+				hx-swap="outerHTML"
+			>
+				<div class="grid grid-cols-3">
+					<label>Current Password</label>
+					<div class="col-span-2">
+						<input type="password" required placeholder="*********" class="input input-bordered w-full select-none"/>
+					</div>
+				</div>
+				<div class="grid grid-cols-3">
+					<label>New Password </label>
+					<div class="col-span-2">
+						<input type="password" required placeholder="*********" class="input input-bordered w-full "/>
+					</div>
+				</div>
+				<div class="ml-auto">
+					<button class="btn btn-accent text-base-100 ">Update</button>
+				</div>
+			</form>
+		</div>
+	</div>
 }
