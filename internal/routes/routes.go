@@ -35,31 +35,31 @@ func InitRoutes(FS embed.FS) http.Handler {
 	// Allow styles in the public folder to be served
 	router.Handle("/*", http.StripPrefix("/", http.FileServer(http.FS(FS))))
 
-	// Views
 	router.Group(func(r chi.Router) {
 		r.Get("/login", internal.GenerateHandler(handler.HandlerSigninIndex))
 		r.Get("/register", internal.GenerateHandler(handler.HandlerRegisterIndex))
-		r.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
 		r.Get("/login/provider/google", internal.GenerateHandler(handler.HandleLoginGoogleIndex))
+		r.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
+		r.Post("/logout", internal.GenerateHandler(handler.Logout))
 
-		// Protected views
-		r.Group(func(acc chi.Router) {
-			acc.Use(middleware.WithAccountSetup, middleware.WithAuth)
-			acc.Get("/", internal.GenerateHandler(handler.HandleHomeIndex))
-			acc.Get("/account/setup", internal.GenerateHandler(handler.HandlerAccountIndex))
-			acc.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
+		r.Group(func(r chi.Router) {
+			r.Use(middleware.WithAccountSetup)
+			r.Get("/", internal.GenerateHandler(handler.HandleHomeIndex)) // Maybe ?
+		})
+
+		r.Group(func(r chi.Router) {
+			r.Use(middleware.WithAccountSetup, middleware.WithAuth)
+			r.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
+			r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
+			r.Post("/register", internal.GenerateHandler(handler.RegisterCreate))
+			r.Put("/settings/account/profile", internal.GenerateHandler(handler.HandleSettingsProfileUpdate))
+		})
+
+		r.Group(func(r chi.Router) {
+			r.Use(middleware.WithAuth)
+			r.Post("/account/setup", internal.GenerateHandler(handler.SetupAccountCreate))
+			r.Get("/account/setup", internal.GenerateHandler(handler.HandlerAccountIndex))
 		})
 	})
-
-	// endpoints
-	router.Group(func(r chi.Router) {
-		r.Use(middleware.WithAccountSetup, middleware.WithAuth)
-		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
-		r.Post("/register", internal.GenerateHandler(handler.RegisterCreate))
-		r.Post("/logout", internal.GenerateHandler(handler.Logout))
-		r.Post("/account/setup", internal.GenerateHandler(handler.SetupAccountCreate))
-		r.Put("/settings/account/profile", internal.GenerateHandler(handler.HandleSettingsProfileUpdate))
-	})
-
 	return router
 }
