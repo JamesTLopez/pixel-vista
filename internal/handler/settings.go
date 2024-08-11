@@ -34,5 +34,7 @@ func HandleSettingsProfileUpdate(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
+	params.Success = true
+
 	return renderComponent(w, r, settings.SettingsProfileForm(params, settings.UpdateProfileErrors{}, user))
 }

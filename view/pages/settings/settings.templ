@@ -2,6 +2,7 @@ package settings
 
 import (
 	"pixelvista/types"
+	"pixelvista/view/components"
 	"pixelvista/view/layout"
 )
 
@@ -22,6 +23,7 @@ templ SettingsIndex(user types.AuthenticatedUser) {
 
 type UpdateProfileParams struct {
 	Username string
+	Success  bool
 }
 
 type UpdateProfileErrors struct {
@@ -51,6 +53,9 @@ templ SettingsProfileForm(params UpdateProfileParams, errors UpdateProfileErrors
 		</div>
 		if len(errors.Username) > 0 {
 			<label class="text-error font-light">{ errors.Username }</label>
+		}
+		if params.Success {
+			@components.Toast("Profile successfully updated.")
 		}
 	</form>
 }

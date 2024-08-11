@@ -1,0 +1,15 @@
+package components 
+
+templ Toast(msg string) {
+	<div id="toast" class="toast toast-top toast-start">
+		<div class="alert alert-success">
+			<span>{ msg }</span>
+		</div>
+	</div>
+	<script type="text/javascript">
+    setTimeout(() => {
+        document.getElementById("toast").remove()
+    },4000)
+
+    </script>
+}
