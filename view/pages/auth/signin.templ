@@ -59,12 +59,6 @@ templ LoginForm(creds supabase.UserCredentials, errors LoginErrors) {
 				<label class="text-error font-light">{ errors.Email }</label>
 			}
 		</label>
-		<label class="form-control w-full">
-			<div class="label">
-				<span class="label-text montserrat">Password</span>
-			</div>
-			<input type="password" name="password" required placeholder="*********" class="input input-bordered w-full"/>
-		</label>
 		<div class="flex justify-start items-center mt-10">
 			if len(errors.InvalidCred) > 0 {
 				<label class="text-error font-light">{ errors.InvalidCred }</label>

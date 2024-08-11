@@ -48,26 +48,6 @@ templ RegisterForm(params RegisterParams, errors RegisterErrors) {
 				<label class="text-error font-light">{ errors.Email }</label>
 			}
 		</label>
-		<label class="form-control w-full">
-			<div class="label">
-				<span class="label-text montserrat">Password</span>
-			</div>
-			<input type="password" name="password" required class="input input-bordered w-full"/>
-		</label>
-		<label class="form-control w-full">
-			<div class="label">
-				<span class="label-text montserrat">Confirm Password</span>
-			</div>
-			<input type="password" name="confirmPassword" required class="input input-bordered w-full"/>
-		</label>
-		<div>
-			if len(errors.Password) > 0 {
-				<label class="text-error font-light">{ errors.Password }</label>
-			}
-			if len(errors.ConfirmPassword) > 0 {
-				<label class="text-error font-light">{ errors.ConfirmPassword }</label>
-			}
-		</div>
 		<div class="ml-0 pl-0">
 			<a href="/login" class="btn btn-link pl-0 ml-0">Already have an account? Login here!</a>
 		</div>
