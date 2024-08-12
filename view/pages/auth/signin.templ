@@ -66,8 +66,8 @@ templ LoginForm(params LoginParams, errors LoginErrors) {
 			}
 		</div>
 		<div>
-			if !params.Success {
-				<h1 class="text-success">Email has been sent</h1>
+			if params.Success {
+				<h1 class="text-success">Email has been sent to the email address provided! </h1>
 			}
 		</div>
 		<button class="btn btn-accent text-base-100">Login</button>
