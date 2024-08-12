@@ -4,45 +4,34 @@ import "pixelvista/view"
 
 templ Navigation() {
 	<div class="navbar bg-base-200">
-		<div class="navbar-start">
-			<div class="dropdown">
-				<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M4 6h16M4 12h16M4 18h7"
-						></path>
-					</svg>
-				</div>
-				<ul
-					tabindex="0"
-					class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-				>
-					<li><a href="/settings">Settings</a></li>
+		<div class="flex-1">
+			<a href="/" class="btn text-base press-start text-accent tracking-tighter">Pixel Vista</a>
+		</div>
+		<div class="flex-none">
+			if view.AuthenticatedUser(ctx).LoggedIn {
+				<ul class="menu menu-horizontal px-1">
 					<li>
-						<form method="POST" action="/logout">
-							<button>Logout</button>
-						</form>
+						<details>
+							<summary>
+								<div class="avatar">
+									<div class="w-8 rounded-full">
+										<img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"/>
+									</div>
+								</div>
+							</summary>
+							<ul class="bg-base-100 rounded-t-none p-2">
+								<li><a href="/settings">Settings</a></li>
+								<li>
+									<form method="POST" action="/logout">
+										<button>Logout</button>
+									</form>
+								</li>
+							</ul>
+						</details>
 					</li>
 				</ul>
-			</div>
-		</div>
-		<div class="navbar-center">
-			<a class="btn btn-ghost text-xl">PixelVista</a>
-		</div>
-		<div class="navbar-end">
-			if view.AuthenticatedUser(ctx).LoggedIn {
-				<h1>{ view.AuthenticatedUser(ctx).Username }</h1>
 			} else {
-				<a class="link link-primary link-hover" href="/login">Login</a>
+				<a class="btn shadow-none text-xs press-start text-accent" href="/login">Login</a>
 			}
 		</div>
 	</div>
