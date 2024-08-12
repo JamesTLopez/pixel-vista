@@ -1,9 +1,6 @@
 package auth
 
-import (
-	"github.com/nedpals/supabase-go"
-	"pixelvista/view/layout"
-)
+import "pixelvista/view/layout"
 
 templ Signin() {
 	@layout.App(false) {
@@ -31,7 +28,7 @@ templ Signin() {
 					<div class="flex flex-col justify-center items-center p-8">
 						<h1 class="text-xl font-semibold text-neutral montserrat">Welcome!</h1>
 					</div>
-					@LoginForm(supabase.UserCredentials{}, LoginErrors{})
+					@LoginForm(LoginParams{}, LoginErrors{})
 				</div>
 			</div>
 		</div>
@@ -40,11 +37,15 @@ templ Signin() {
 
 type LoginErrors struct {
 	Email       string
-	Password    string
 	InvalidCred string
 }
 
-templ LoginForm(creds supabase.UserCredentials, errors LoginErrors) {
+type LoginParams struct {
+	Email   string
+	Success bool
+}
+
+templ LoginForm(params LoginParams, errors LoginErrors) {
 	<form
 		hx-post="/login"
 		hx-swap="outerHTML"
@@ -54,7 +55,7 @@ templ LoginForm(creds supabase.UserCredentials, errors LoginErrors) {
 			<div class="label">
 				<span class="label-text montserrat">Email address</span>
 			</div>
-			<input type="email" value={ creds.Email } name="email" placeholder="example@gmail.com" class="input input-bordered w-full"/>
+			<input type="email" value={ params.Email } name="email" placeholder="example@gmail.com" class="input input-bordered w-full"/>
 			if len(errors.Email) > 0 {
 				<label class="text-error font-light">{ errors.Email }</label>
 			}
@@ -62,6 +63,11 @@ templ LoginForm(creds supabase.UserCredentials, errors LoginErrors) {
 		<div class="flex justify-start items-center mt-10">
 			if len(errors.InvalidCred) > 0 {
 				<label class="text-error font-light">{ errors.InvalidCred }</label>
+			}
+		</div>
+		<div>
+			if params.Success {
+				<h1>email has been sent</h1>
 			}
 		</div>
 		<div class="ml-0 pl-0"><a href="/register" class="btn btn-link pl-0 ml-0">Don't have an account? Sign up here!</a></div>

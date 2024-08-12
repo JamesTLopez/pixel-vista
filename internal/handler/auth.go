@@ -93,52 +93,27 @@ func HandlerAuthCallback(w http.ResponseWriter, r *http.Request) error {
 }
 
 func LoginCreate(w http.ResponseWriter, r *http.Request) error {
-	credentials := supabase.UserCredentials{
-		Email:    r.FormValue("email"),
-		Password: r.FormValue("password"),
+	credentials := auth.LoginParams{
+		Email: r.FormValue("email"),
 	}
-	if !validation.IsValidEmail(credentials.Email) {
 
+	if !validation.IsValidEmail(credentials.Email) {
+		credentials.Success = false
 		return renderComponent(w, r, auth.LoginForm(credentials, auth.LoginErrors{
 			Email: "Invalid email, please try again",
 		}))
 	}
 
-	resp, err := sb.Client.Auth.SignIn(r.Context(), credentials)
+	err := sb.Client.Auth.SendMagicLink(r.Context(), credentials.Email)
 
 	if err != nil {
 		return renderComponent(w, r, auth.LoginForm(credentials, auth.LoginErrors{
 			InvalidCred: "Invalid credentials, please try again",
 		}))
 	}
-	setAuthCookie(r, resp.AccessToken)
-	hxRedirect(w, r, "/")
-	return nil
-}
 
-func RegisterCreate(w http.ResponseWriter, r *http.Request) error {
-	params := auth.RegisterParams{
-		Email:           r.FormValue("email"),
-		Password:        r.FormValue("password"),
-		ConfirmPassword: r.FormValue("confirmPassword"),
-	}
-
-	errors := auth.RegisterErrors{}
-
-	if ok := validation.New(&params, validation.Fields{
-		"Email":           validation.Rules(validation.Email),
-		"Password":        validation.Rules(validation.Password),
-		"ConfirmPassword": validation.Rules(validation.Equal(params.Password), validation.Message("Passwords do not match")),
-	}).Validate(&errors); !ok {
-		return renderComponent(w, r, auth.RegisterForm(params, errors))
-	}
-
-	resp, err := sb.Client.Auth.SignUp(r.Context(), supabase.UserCredentials{Email: params.Email, Password: params.Password})
-	if err != nil {
-		return err
-	}
-
-	return renderComponent(w, r, auth.RegisterSuccess(resp.Email))
+	credentials.Success = true
+	return renderComponent(w, r, auth.LoginForm(credentials, auth.LoginErrors{}))
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) error {

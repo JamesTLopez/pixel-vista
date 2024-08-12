@@ -41,6 +41,7 @@ func InitRoutes(FS embed.FS) http.Handler {
 		r.Get("/login/provider/google", internal.GenerateHandler(handler.HandleLoginGoogleIndex))
 		r.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
 		r.Post("/logout", internal.GenerateHandler(handler.Logout))
+		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
 
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.WithAccountSetup)
@@ -50,8 +51,6 @@ func InitRoutes(FS embed.FS) http.Handler {
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.WithAccountSetup, middleware.WithAuth)
 			r.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
-			r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
-			r.Post("/register", internal.GenerateHandler(handler.RegisterCreate))
 			r.Put("/settings/account/profile", internal.GenerateHandler(handler.HandleSettingsProfileUpdate))
 		})
 
