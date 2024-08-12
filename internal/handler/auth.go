@@ -17,9 +17,7 @@ import (
 func HandlerSigninIndex(w http.ResponseWriter, r *http.Request) error {
 	return auth.Signin().Render(r.Context(), w)
 }
-func HandlerRegisterIndex(w http.ResponseWriter, r *http.Request) error {
-	return auth.Register().Render(r.Context(), w)
-}
+
 func HandlerAccountIndex(w http.ResponseWriter, r *http.Request) error {
 	return auth.AccountCreationPage().Render(r.Context(), w)
 }
