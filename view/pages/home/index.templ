@@ -4,6 +4,14 @@ import "pixelvista/view/layout"
 
 templ Index() {
 	@layout.App(true) {
-		<div class="text-red-500"><p>Hello from PixelVista</p></div>
+		@layout.Wrapper() {
+			<div class="flex flex-col justify-center items-center gap-4">
+				<h1>Hello ! Welcome to Pixel Vista!</h1>
+				<p>Lets get started! </p>
+				<div>
+					<a class="btn btn-accent text-base-100 ">Generate Images Now <i class="fa-solid fa-arrow-right"></i></a>
+				</div>
+			</div>
+		}
 	}
 }
