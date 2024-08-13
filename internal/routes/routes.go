@@ -51,6 +51,7 @@ func InitRoutes(FS embed.FS) http.Handler {
 			r.Use(middleware.WithAccountSetup, middleware.WithAuth)
 			r.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
 			r.Put("/settings/account/profile", internal.GenerateHandler(handler.HandleSettingsProfileUpdate))
+			r.Get("/generate", internal.GenerateHandler(handler.HandleGenerateIndex))
 		})
 
 		r.Group(func(r chi.Router) {

@@ -9,6 +9,16 @@ module.exports = {
   ],
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
   daisyui: {
-    themes: ["retro"],
+    themes: [
+      "retro",
+      {
+        pixelvista: {
+          primary: "#1EA0E6",
+          secondary: "#1BCBE3",
+          accent: "#B993E9",
+          neutral: "#253D5B",
+        },
+      },
+    ],
   },
 };
