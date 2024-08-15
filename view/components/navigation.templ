@@ -3,13 +3,18 @@ package components
 import "pixelvista/view"
 
 templ Navigation() {
-	<div class="navbar bg-base-200">
+	<div class="navbar bg-base-200 px-10">
 		<div class="flex-1">
 			<a href="/" class="link no-underline text-base press-start text-accent tracking-tighter">Pixel Vista</a>
 		</div>
 		<div class="flex-none">
 			if view.AuthenticatedUser(ctx).LoggedIn {
-				<ul class="menu menu-horizontal px-1">
+				<ul class="menu menu-horizontal px-1 justify-center items-center gap-2">
+					<li>
+						<a href="/generate" class="btn btn-outline btn-accent ">
+							<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Art
+						</a>
+					</li>
 					<li>
 						<details>
 							<summary>
