@@ -1,13 +1,66 @@
 package generate
 
-import "pixelvista/view/layout"
+import (
+	"fmt"
+	"pixelvista/types"
+	"pixelvista/view/layout"
+)
 
-templ GeneratePage() {
+type ViewData struct {
+	Images []types.Image
+}
+
+templ GeneratePage(data ViewData) {
 	@layout.App(true) {
-		@layout.Wrapper() {
-			<div>
-				generate page
+		<div class="flex w-full h-[calc(100vh-70px)]">
+			<div class="w-[300px] bg-base-200 border-r h-full p-4">
+				@GenerateForm()
 			</div>
-		}
+			<div class="flex-1 bg">
+				@ImageGallery(data.Images)
+			</div>
+		</div>
 	}
+}
+
+templ GenerateForm() {
+	<form
+		hx-post="/generate"
+		hx-swap="beforeend"
+		hx-target="#gallery"
+	>
+		<div>
+			<button class="btn btn-outline btn-accent w-full">
+				<i class="fa-solid fa-wand-magic-sparkles"></i> Generate
+			</button>
+		</div>
+	</form>
+}
+
+templ GalleryImage(image types.Image) {
+	if image.Status == types.ImageStatusCompleted {
+		<div class="bg-base-300 aspect-[3/4] rounded-xl border">
+			Image
+		</div>
+	} else if image.Status == types.ImageStatusFailed {
+		<div class="bg-red-200 aspect-[3/4] flex-col flex justify-center items-center rounded-xl border">
+			<i class="text-4xl fa-solid fa-bug text-error"></i>
+		</div>
+	} else if image.Status == types.ImageStatusPending {
+		<div
+			hx-get={ fmt.Sprintf("/generate/image/status/%d", image.ID) }
+			hx-trigger="load delay:3s"
+			class="bg-base-300 aspect-[3/4] flex-col flex justify-center items-center rounded-xl border"
+		>
+			<span class="loading loading-spinner loading-lg text-primary-content"></span>
+		</div>
+	}
+}
+
+templ ImageGallery(images []types.Image) {
+	<div id="gallery" class="grid grid-cols-4 p-4 gap-2">
+		for _,image := range images {
+			@GalleryImage(image)
+		}
+	</div>
 }
