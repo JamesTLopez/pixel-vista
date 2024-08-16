@@ -42,10 +42,6 @@ func InitRoutes(FS embed.FS) http.Handler {
 		r.Post("/logout", internal.GenerateHandler(handler.Logout))
 		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
 
-		r.Get("/generate", internal.GenerateHandler(handler.HandleGenerateIndex))
-		r.Post("/generate", internal.GenerateHandler(handler.POSTGenerateImage))
-		r.Get("/generate/image/status/{id}", internal.GenerateHandler(handler.GETGenerateImageStatus))
-
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.WithAccountSetup)
 			r.Get("/", internal.GenerateHandler(handler.HandleHomeIndex)) // Maybe ?
@@ -55,6 +51,9 @@ func InitRoutes(FS embed.FS) http.Handler {
 			r.Use(middleware.WithAccountSetup, middleware.WithAuth)
 			r.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
 			r.Put("/settings/account/profile", internal.GenerateHandler(handler.HandleSettingsProfileUpdate))
+			r.Get("/generate", internal.GenerateHandler(handler.HandleGenerateIndex))
+			r.Post("/generate", internal.GenerateHandler(handler.POSTGenerateImage))
+			r.Get("/generate/image/status/{id}", internal.GenerateHandler(handler.GETGenerateImageStatus))
 		})
 
 		r.Group(func(r chi.Router) {

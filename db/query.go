@@ -7,6 +7,14 @@ import (
 	"github.com/google/uuid"
 )
 
+func GetImagesByUserID(userID uuid.UUID) ([]types.Image, error) {
+	var images []types.Image
+
+	err := Bun.NewSelect().Model(&images).Where("deleted = ?", false).Where("user_id = ?", userID).Scan(context.Background())
+
+	return images, err
+}
+
 func CreateAccount(account types.Account) error {
 	_, err := Bun.NewInsert().
 		Model(&account).

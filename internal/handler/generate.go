@@ -3,6 +3,8 @@ package handler
 import (
 	"log/slog"
 	"net/http"
+	"pixelvista/db"
+	"pixelvista/internal"
 	"pixelvista/types"
 	"pixelvista/view/pages/generate"
 
@@ -10,8 +12,17 @@ import (
 )
 
 func HandleGenerateIndex(w http.ResponseWriter, r *http.Request) error {
+	user := internal.GetAuthenticatedUser(r)
 
-	return renderComponent(w, r, generate.GeneratePage(generate.ViewData{}))
+	images, err := db.GetImagesByUserID(user.ID)
+
+	if err != nil {
+		return err
+	}
+
+	return renderComponent(w, r, generate.GeneratePage(generate.ViewData{
+		Images: images,
+	}))
 }
 
 func POSTGenerateImage(w http.ResponseWriter, r *http.Request) error {
