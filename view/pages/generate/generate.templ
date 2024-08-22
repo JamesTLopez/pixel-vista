@@ -4,17 +4,20 @@ import (
 	"fmt"
 	"pixelvista/types"
 	"pixelvista/view/layout"
+	"strconv"
 )
 
 type ViewData struct {
-	Images []types.Image
+	Images     []types.Image
+	FormParams FormParams
+	FormErrors FormErrors
 }
 
 templ GeneratePage(data ViewData) {
 	@layout.App(true) {
 		<div class="flex w-full h-[calc(100vh-70px)]">
 			<div class="w-[300px] bg-base-200 border-r h-full p-4">
-				@GenerateForm()
+				@GenerateForm(data.FormParams, data.FormErrors)
 			</div>
 			<div class="flex-1 bg">
 				@ImageGallery(data.Images)
@@ -23,19 +26,63 @@ templ GeneratePage(data ViewData) {
 	}
 }
 
-templ GenerateForm() {
+type FormErrors struct {
+	Prompt string
+	Amount string
+}
+
+type FormParams struct {
+	Prompt string
+	Amount int
+}
+
+templ GenerateForm(params FormParams, errors FormErrors) {
 	<form
 		hx-post="/generate"
-		hx-swap="afterend"
-		hx-target="#gallery"
+		hx-swap="outerHTML"
 	>
 		<div>
-			<button class="btn btn-outline btn-accent w-full">
-				<i class="fa-solid fa-wand-magic-sparkles"></i> Generate
-			</button>
+			<label class="form-control">
+				<div class="label">
+					<span class="label-text">Enter your prompt</span>
+				</div>
+				<textarea name="prompt" class="textarea texarea-bordered h-24">{ params.Prompt }</textarea>
+				if len(errors.Prompt) > 0 {
+					<div class="label flex flex-col">
+						<span class="label-text text-error">{ errors.Prompt }</span>
+					</div>
+				}
+				<div class="label">
+					<span class="label-text">How many Images</span>
+				</div>
+				<div class="join">
+					for _, amount := range amounts {
+						if isChecked(amount,strconv.Itoa(params.Amount)) {
+							<input class="join-item btn" type="radio" value={ amount } checked name="amount" aria-label={ amount }/>
+						} else {
+							<input class="join-item btn" type="radio" value={ amount } name="amount" aria-label={ amount }/>
+						}
+					}
+				</div>
+				if len(errors.Amount) > 0 {
+					<div class="label flex flex-col">
+						<span class="label-text text-error">{ errors.Amount }</span>
+					</div>
+				}
+				<button class="btn btn-outline btn-accent w-full">Generate</button>
+			</label>
 		</div>
 	</form>
 }
+
+func isChecked(value string, currentAmount string) bool {
+	if value == currentAmount {
+		return true
+	}
+	return false
+}
+
+var amounts = []string{"1", "2", "4", "8"}
 
 templ GalleryImage(image types.Image) {
 	if image.Status == types.ImageStatusCompleted {

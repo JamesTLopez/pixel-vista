@@ -20,6 +20,7 @@ type Image struct {
 	Status    ImageStatus
 	Prompt    string
 	ImageUrl  string
+	BatchID   uuid.UUID
 	deleted   bool      `bun:"default:'false'"`
 	CreatedAt time.Time `bun:"default:'now()'"`
 	DeletedAt time.Time
