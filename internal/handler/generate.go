@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"log/slog"
 	"net/http"
 	"pixelvista/db"
@@ -52,7 +51,6 @@ func GETGenerateImageStatus(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Hai")
 	slog.Info("checking image status", "id", id)
 
 	image, err := db.GetImageById(id)
