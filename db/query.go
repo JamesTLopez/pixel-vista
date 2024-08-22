@@ -7,6 +7,19 @@ import (
 	"github.com/google/uuid"
 )
 
+func CreateImage(image *types.Image) error {
+	_, err := Bun.NewInsert().Model(image).Exec(context.Background())
+
+	return err
+}
+func GetImageById(id int) (types.Image, error) {
+	var image types.Image
+
+	err := Bun.NewSelect().Model(&image).Where("id = ?", id).Scan(context.Background())
+
+	return image, err
+}
+
 func GetImagesByUserID(userID uuid.UUID) ([]types.Image, error) {
 	var images []types.Image
 

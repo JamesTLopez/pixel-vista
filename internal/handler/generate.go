@@ -1,12 +1,14 @@
 package handler
 
 import (
+	"fmt"
 	"log/slog"
 	"net/http"
 	"pixelvista/db"
 	"pixelvista/internal"
 	"pixelvista/types"
 	"pixelvista/view/pages/generate"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -26,14 +28,37 @@ func HandleGenerateIndex(w http.ResponseWriter, r *http.Request) error {
 }
 
 func POSTGenerateImage(w http.ResponseWriter, r *http.Request) error {
-	return renderComponent(w, r, generate.GalleryImage(types.Image{Status: types.ImageStatusPending}))
+	user := internal.GetAuthenticatedUser(r)
+
+	prompt := "eden in the garden"
+	img := types.Image{
+		Prompt: prompt,
+		UserId: user.ID,
+		Status: types.ImageStatusPending,
+	}
+
+	err := db.CreateImage(&img)
+
+	if err != nil {
+		return nil
+	}
+
+	return renderComponent(w, r, generate.GalleryImage(img))
 }
 
 func GETGenerateImageStatus(w http.ResponseWriter, r *http.Request) error {
-	id := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+
+	if err != nil {
+		return err
+	}
+	fmt.Println("Hai")
 	slog.Info("checking image status", "id", id)
-	image := types.Image{
-		Status: types.ImageStatusCompleted,
+
+	image, err := db.GetImageById(id)
+
+	if err != nil {
+		return err
 	}
 
 	return renderComponent(w, r, generate.GalleryImage(image))

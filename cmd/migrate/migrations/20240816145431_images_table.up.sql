@@ -2,7 +2,7 @@ CREATE TABLE
     IF NOT EXISTS images (
         id serial primary key,
         user_id uuid references auth.users,
-        status int not null,
+        status int not null default 1,
         prompt text not null,
         image_url text,
         deleted boolean not null default 'false',

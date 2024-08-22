@@ -22,7 +22,7 @@ up:
 
 reset:
 	@go run cmd/reset/main.go up
-
+	@go run cmd/migrate/main.go up
 down:
 	@go run cmd/migrate/main.go down
 

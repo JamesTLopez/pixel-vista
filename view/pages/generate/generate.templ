@@ -26,7 +26,7 @@ templ GeneratePage(data ViewData) {
 templ GenerateForm() {
 	<form
 		hx-post="/generate"
-		hx-swap="beforeend"
+		hx-swap="afterend"
 		hx-target="#gallery"
 	>
 		<div>
@@ -39,18 +39,18 @@ templ GenerateForm() {
 
 templ GalleryImage(image types.Image) {
 	if image.Status == types.ImageStatusCompleted {
-		<div class="bg-base-300 aspect-[3/4] rounded-xl border">
-			Image
+		<div class="bg-base-300 aspect-[3/4] rounded-xl border cursor-pointer">
+			<img src={ image.ImageUrl } class="w-full h-full rounded-xl"/>
 		</div>
 	} else if image.Status == types.ImageStatusFailed {
-		<div class="bg-red-200 aspect-[3/4] flex-col flex justify-center items-center rounded-xl border">
+		<div class="bg-red-200 aspect-[3/4] flex-col flex justify-center items-center rounded-xl ">
 			<i class="text-4xl fa-solid fa-bug text-error"></i>
 		</div>
 	} else if image.Status == types.ImageStatusPending {
 		<div
 			hx-get={ fmt.Sprintf("/generate/image/status/%d", image.ID) }
-			hx-trigger="load delay:3s"
-			class="bg-base-300 aspect-[3/4] flex-col flex justify-center items-center rounded-xl border"
+			hx-trigger="load, delay:3s"
+			class="bg-base-300 aspect-[3/4] flex-col flex justify-center items-center rounded-xl "
 		>
 			<span class="loading loading-spinner loading-lg text-primary-content"></span>
 		</div>
