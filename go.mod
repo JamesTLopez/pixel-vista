@@ -21,6 +21,11 @@ require (
 )
 
 require (
+	github.com/replicate/replicate-go v0.23.0 // indirect
+	golang.org/x/sync v0.6.0 // indirect
+)
+
+require (
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.6.0

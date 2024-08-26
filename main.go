@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"pixelvista/db"
+	"pixelvista/internal/replicate"
 	"pixelvista/internal/routes"
 	superb "pixelvista/internal/sb"
 	"pixelvista/internal/session"
@@ -32,6 +33,12 @@ func main() {
 
 	session.InitSession()
 	superb.SbInit()
+
+	err := replicate.ReplicateInit()
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if err := db.Init(); err != nil {
 		log.Fatal(err)
