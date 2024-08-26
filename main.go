@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"pixelvista/db"
-	"pixelvista/internal/replicate"
+	replicate "pixelvista/internal/repl"
 	"pixelvista/internal/routes"
 	superb "pixelvista/internal/sb"
 	"pixelvista/internal/session"
