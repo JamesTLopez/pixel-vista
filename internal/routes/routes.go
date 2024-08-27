@@ -41,6 +41,7 @@ func InitRoutes(FS embed.FS) http.Handler {
 		r.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
 		r.Post("/logout", internal.GenerateHandler(handler.Logout))
 		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
+		r.Post("/replicate/callback/{userID}/{batchID}", internal.GenerateHandler(handler.ReplicateCallback))
 
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.WithAccountSetup)

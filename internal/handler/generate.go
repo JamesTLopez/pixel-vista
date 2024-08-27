@@ -3,10 +3,12 @@ package handler
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"pixelvista/db"
 	"pixelvista/internal"
+	repl "pixelvista/internal/repl"
 	"pixelvista/pkg/validation"
 	"pixelvista/types"
 	"pixelvista/view/pages/generate"
@@ -14,6 +16,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+	"github.com/replicate/replicate-go"
 	"github.com/uptrace/bun"
 )
 
@@ -53,11 +56,19 @@ func POSTGenerateImage(w http.ResponseWriter, r *http.Request) error {
 		return renderComponent(w, r, generate.GenerateForm(params, errors))
 	}
 
-	// return nil
+	batchID := uuid.New()
+	genImageParams := GenerateImageParams{
+		Prompt:  params.Prompt,
+		Amount:  params.Amount,
+		UserID:  user.ID,
+		BatchID: batchID,
+	}
+
+	if err := generateImage(r.Context(), genImageParams); err != nil {
+		return err
+	}
 
 	return db.Bun.RunInTx(r.Context(), &sql.TxOptions{}, func(ctx context.Context, tx bun.Tx) error {
-
-		batchID := uuid.New()
 
 		for x := 0; x < amount; x++ {
 			img := types.Image{
@@ -92,4 +103,27 @@ func GETGenerateImageStatus(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return renderComponent(w, r, generate.GalleryImage(image))
+}
+
+type GenerateImageParams struct {
+	Prompt  string
+	Amount  int
+	BatchID uuid.UUID
+	UserID  uuid.UUID
+}
+
+func generateImage(ctx context.Context, params GenerateImageParams) error {
+	input := replicate.PredictionInput{
+		"prompt":      params.Prompt,
+		"num_outputs": params.Amount,
+	}
+
+	webhook := replicate.Webhook{
+		URL:    fmt.Sprintf("https://webhook.site/abb3e76d-f1aa-4d79-9c40-18a984c5eaf2/%s/%s", params.UserID, params.BatchID),
+		Events: []replicate.WebhookEventType{"start", "completed"},
+	}
+
+	_, err := repl.ReplicateClient.CreatePredictionWithModel(ctx, "black-forest-labs", "flux-schnell", input, &webhook, false)
+
+	return err
 }

@@ -12,6 +12,14 @@ func CreateImage(image *types.Image) error {
 
 	return err
 }
+
+func UpdateImage(image *types.Image) error {
+
+	_, err := Bun.NewUpdate().Model(image).WherePK().Exec(context.Background())
+
+	return err
+}
+
 func GetImageById(id int) (types.Image, error) {
 	var image types.Image
 
@@ -46,4 +54,13 @@ func GetAccountGyUserID(id uuid.UUID) (types.Account, error) {
 func UpdateProfile(account *types.Account) error {
 	_, err := Bun.NewUpdate().Model(account).WherePK().Exec(context.Background())
 	return err
+}
+
+func GetImagesByBatchID(batchID uuid.UUID) ([]types.Image, error) {
+	var images []types.Image
+
+	err := Bun.NewSelect().Model(&images).Where("batch_id = ?", batchID).Scan(context.Background())
+
+	return images, err
+
 }

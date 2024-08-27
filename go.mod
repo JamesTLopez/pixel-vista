@@ -15,15 +15,13 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.17.1
 	github.com/lib/pq v1.10.9
 	github.com/nedpals/supabase-go v0.4.0
+	github.com/replicate/replicate-go v0.23.0
 	github.com/uptrace/bun v1.2.1
 	github.com/uptrace/bun/dialect/pgdialect v1.2.1
 	github.com/uptrace/bun/extra/bundebug v1.2.1
 )
 
-require (
-	github.com/replicate/replicate-go v0.23.0 // indirect
-	golang.org/x/sync v0.6.0 // indirect
-)
+require golang.org/x/sync v0.6.0 // indirect
 
 require (
 	github.com/fatih/color v1.16.0 // indirect
