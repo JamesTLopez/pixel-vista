@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
 	"pixelvista/db"
 	"pixelvista/internal"
 	repl "pixelvista/internal/repl"
@@ -118,8 +119,10 @@ func generateImage(ctx context.Context, params GenerateImageParams) error {
 		"num_outputs": params.Amount,
 	}
 
+	webhookURL := os.Getenv("WEBHOOK")
+
 	webhook := replicate.Webhook{
-		URL:    fmt.Sprintf("https://webhook.site/abb3e76d-f1aa-4d79-9c40-18a984c5eaf2/%s/%s", params.UserID, params.BatchID),
+		URL:    fmt.Sprintf("%s/replicate/callback/%s/%s", webhookURL, params.UserID, params.BatchID),
 		Events: []replicate.WebhookEventType{"start", "completed"},
 	}
 

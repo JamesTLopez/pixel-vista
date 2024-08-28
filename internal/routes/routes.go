@@ -3,10 +3,12 @@ package routes
 import (
 	"embed"
 	"net/http"
+	"os"
 	"pixelvista/internal"
 	"pixelvista/internal/handler"
 	"pixelvista/internal/middleware"
 	"pixelvista/internal/session"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	chiMiddle "github.com/go-chi/chi/v5/middleware"
@@ -23,11 +25,14 @@ func InitRoutes(FS embed.FS) http.Handler {
 	// Custom middleware
 	router.Use(middleware.WithUser)
 
+	allowed_origins := os.Getenv("ALLOWED_ORIGINS")
+
+	origins := strings.Split(allowed_origins, ",")
+
 	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"http://*", "https://*"}, // TODO: for security, change such that it targets published origins
+		AllowedOrigins:   origins,
 		AllowedMethods:   []string{"GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: true,
 		MaxAge:           3000,
 	}))

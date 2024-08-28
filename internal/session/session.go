@@ -13,9 +13,8 @@ func InitSession() {
 	SessionManager = scs.New()
 
 	SessionManager.Lifetime = 24 * time.Hour
-	// SessionManager.IdleTimeout = 20 * time.Minute
+	SessionManager.IdleTimeout = 20 * time.Minute
 	SessionManager.Cookie.Name = "pixel_vista"
-	// SessionManager.Cookie.Domain = "e"
 	SessionManager.Cookie.HttpOnly = true
 	SessionManager.Cookie.Path = "/"
 	SessionManager.Cookie.Persist = true
