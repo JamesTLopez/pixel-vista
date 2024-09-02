@@ -3,6 +3,7 @@ package generate
 import (
 	"fmt"
 	"pixelvista/types"
+	"pixelvista/view/components"
 	"pixelvista/view/layout"
 	"strconv"
 )
@@ -27,8 +28,11 @@ templ GeneratePage(data ViewData) {
 }
 
 type FormErrors struct {
-	Prompt string
-	Amount string
+	Prompt        string
+	Amount        string
+	CreditsNeeded int
+	UserCredits   int
+	EnoughCredits bool
 }
 
 type FormParams struct {
@@ -73,6 +77,9 @@ templ GenerateForm(params FormParams, errors FormErrors) {
 			</label>
 		</div>
 	</form>
+	if errors.EnoughCredits {
+		@components.CreditsModal(errors.CreditsNeeded, errors.UserCredits)
+	}
 }
 
 func isChecked(value string, currentAmount string) bool {

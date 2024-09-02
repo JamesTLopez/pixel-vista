@@ -1,0 +1,20 @@
+package components 
+
+import "strconv"
+
+templ CreditsModal(creditsNeed int, userCredit int) {
+	<dialog id="cred-modal" class="modal modal-bottom sm:modal-middle">
+		<div class="modal-box">
+			<h3 class="text-lg">Please buy more credits to keep using our service!</h3>
+			<p>You have { strconv.Itoa(userCredit) } but need { strconv.Itoa(creditsNeed) }</p>
+			<div class="modal-action">
+				<form method="dialog">
+					<button class="btn">Close</button>
+				</form>
+			</div>
+		</div>
+	</dialog>
+	<script>
+        document.getElementById("cred-modal").showModal()
+    </script>
+}

@@ -4,15 +4,29 @@ import (
 	"pixelvista/types"
 	"pixelvista/view/components"
 	"pixelvista/view/layout"
+	"strconv"
 )
 
 templ SettingsIndex(user types.AuthenticatedUser) {
 	@layout.App(true) {
 		@layout.Wrapper() {
 			<div class="flex flex-col lg:w-2/3 mx-auto prose">
-				<h3>Profile</h3>
-				<div class="divider"></div>
-				@SettingsProfileForm(UpdateProfileParams{Username: user.Account.Username}, UpdateProfileErrors{}, user)
+				<div class="flex flex-col w-full">
+					<h3>Profile</h3>
+					<div class="divider"></div>
+					@SettingsProfileForm(UpdateProfileParams{Username: user.Account.Username}, UpdateProfileErrors{}, user)
+					<h3>Credits</h3>
+					<div class="divider"></div>
+					<div class="grid grid-cols-3">
+						<label>Credits</label>
+						<div class="col-span-1">
+							{ strconv.Itoa(user.Credits) }
+						</div>
+						<div class="col-span-1 ml-auto">
+							<button class="btn min-w-[120px] btn-accent text-base-100">Buy Credits</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		}
 	}
@@ -46,7 +60,7 @@ templ SettingsProfileForm(params UpdateProfileParams, errors UpdateProfileErrors
 			</div>
 		</div>
 		<div class="ml-auto">
-			<button class="btn btn-accent text-base-100">Update</button>
+			<button class="btn btn-accent text-base-100 min-w-[120px]">Update</button>
 		</div>
 		if len(errors.Username) > 0 {
 			<label class="text-error font-light">{ errors.Username }</label>
