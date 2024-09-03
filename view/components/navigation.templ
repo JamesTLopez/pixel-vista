@@ -3,9 +3,14 @@ package components
 import "pixelvista/view"
 
 templ Navigation() {
-	<div class="navbar bg-base-200 px-10">
+	<div class="navbar bg-base-200 px-10 border-b border-base-300">
 		<div class="flex-1">
-			<a href="/" class="link no-underline text-base press-start text-accent tracking-tighter">Pixel Vista</a>
+			<a href="/" class="link no-underline text-accent press-start flex items-center w-[300px] gap-1">
+				<div class="max-w-[30px] w-full">
+					<svg viewBox="0 0 85 85" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" fill="currentColor" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g><g><path d="M53.957,2.125l28.879,0.939l-28.879,27.62l-0,-28.559Zm-2.098,1.542l-0,28.459l-26.848,-0c9.156,-9.28 17.935,-18.912 26.848,-28.459Zm29.437,3.855l3.704,1.274l-13.374,7.944l9.67,-9.218Zm-72.445,3.151l5.867,-0l13.67,14.95l-6.36,6.503l-13.177,-0c0.001,-7.156 -0,-14.301 -0,-21.453Zm-2.098,1.307l-0,6.201l-6.753,0l6.753,-6.201Zm3.573,22.291l41.041,-0l-11.44,31.274l-29.601,-31.274Zm41.533,4.827l-0,43.777l-13.375,-7.307c4.46,-12.159 8.913,-12.309 13.375,-36.47Z" style="fill-rule:nonzero;"></path></g></g></svg>
+				</div>
+				<label class="tracking-[-0.12em] text-xs">Pixel Vista</label>
+			</a>
 		</div>
 		<div class="flex-none">
 			if view.AuthenticatedUser(ctx).LoggedIn {

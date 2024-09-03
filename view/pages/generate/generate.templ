@@ -17,10 +17,10 @@ type ViewData struct {
 templ GeneratePage(data ViewData) {
 	@layout.App(true) {
 		<div class="flex w-full h-[calc(100vh-70px)]">
-			<div class="w-[300px] bg-base-200 border-r h-full p-4">
+			<div class="w-[300px] bg-base-200 border-r h-full p-4 border-r-base-300">
 				@GenerateForm(data.FormParams, data.FormErrors)
 			</div>
-			<div class="flex-1 bg">
+			<div class="flex-1 h-full overflow-y-scroll">
 				@ImageGallery(data.Images)
 			</div>
 		</div>
@@ -45,36 +45,42 @@ templ GenerateForm(params FormParams, errors FormErrors) {
 		hx-post="/generate"
 		hx-swap="outerHTML"
 	>
-		<div>
-			<label class="form-control">
-				<div class="label">
-					<span class="label-text">Enter your prompt</span>
+		<div class="border border-base-300 p-2 rounded-lg border-opacity-50 h-full flex flex-col">
+			<label class="form-control flex flex-col gap-4">
+				<div class="flex flex-col">
+					<div class="label">
+						<span class="label-text font-semibold text-accent">Prompt*</span>
+					</div>
+					<textarea name="prompt" class="textarea texarea-bordered h-24">{ params.Prompt }</textarea>
 				</div>
-				<textarea name="prompt" class="textarea texarea-bordered h-24">{ params.Prompt }</textarea>
 				if len(errors.Prompt) > 0 {
 					<div class="label flex flex-col">
 						<span class="label-text text-error">{ errors.Prompt }</span>
 					</div>
 				}
-				<div class="label">
-					<span class="label-text">How many Images</span>
-				</div>
-				<div class="join">
-					for _, amount := range amounts {
-						if isChecked(amount,strconv.Itoa(params.Amount)) {
-							<input class="join-item btn" type="radio" value={ amount } checked name="amount" aria-label={ amount }/>
-						} else {
-							<input class="join-item btn" type="radio" value={ amount } name="amount" aria-label={ amount }/>
+				<div class="flex flex-col">
+					<div class="label">
+						<span class="label-text font-semibold text-accent">How Many Images*</span>
+					</div>
+					<div class="join">
+						for _, amount := range amounts {
+							if isChecked(amount,strconv.Itoa(params.Amount)) {
+								<input class="join-item btn mx-auto text-accent" type="radio" value={ amount } checked name="amount" aria-label={ amount }/>
+							} else {
+								<input class="join-item btn mx-auto text-accent" type="radio" value={ amount } name="amount" aria-label={ amount }/>
+							}
 						}
-					}
+					</div>
 				</div>
 				if len(errors.Amount) > 0 {
 					<div class="label flex flex-col">
 						<span class="label-text text-error">{ errors.Amount }</span>
 					</div>
 				}
-				<button class="btn btn-outline btn-accent w-full">Generate</button>
 			</label>
+			<div class="mt-auto">
+				<button class="btn btn-outline btn-accent mt-auto w-full">Generate</button>
+			</div>
 		</div>
 	</form>
 	if errors.EnoughCredits {
@@ -93,11 +99,11 @@ var amounts = []string{"1", "2", "4", "8"}
 
 templ GalleryImage(image types.Image) {
 	if image.Status == types.ImageStatusCompleted {
-		<div class="bg-base-300 aspect-[3/4] rounded-xl border cursor-pointer">
+		<div class="bg-base-300 aspect-square rounded-xl border cursor-pointer">
 			<img src={ image.ImageUrl } class="w-full h-full rounded-xl"/>
 		</div>
 	} else if image.Status == types.ImageStatusFailed {
-		<div class="bg-red-200 aspect-[3/4] flex-col flex justify-center items-center rounded-xl ">
+		<div class="bg-red-200 aspect-square flex-col flex justify-center items-center rounded-xl ">
 			<i class="text-4xl fa-solid fa-bug text-error"></i>
 		</div>
 	} else if image.Status == types.ImageStatusPending {
@@ -105,7 +111,7 @@ templ GalleryImage(image types.Image) {
 			hx-get={ fmt.Sprintf("/generate/image/status/%d", image.ID) }
 			hx-trigger="load delay:3s"
 			hx-swap="outerHTML"
-			class="bg-base-300 aspect-[3/4] flex-col flex justify-center items-center rounded-xl "
+			class="bg-base-300 aspect-square flex-col flex justify-center items-center rounded-xl "
 		>
 			<span class="loading loading-spinner loading-lg text-primary-content"></span>
 		</div>
@@ -113,7 +119,7 @@ templ GalleryImage(image types.Image) {
 }
 
 templ ImageGallery(images []types.Image) {
-	<div id="gallery" class="grid grid-cols-4 p-4 gap-2">
+	<div id="gallery" class="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 p-4 gap-2">
 		for _,image := range images {
 			@GalleryImage(image)
 		}
