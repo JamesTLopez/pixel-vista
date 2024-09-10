@@ -60,6 +60,7 @@ func InitRoutes(FS embed.FS) http.Handler {
 			r.Get("/generate", internal.GenerateHandler(handler.HandleGenerateIndex))
 			r.Post("/generate", internal.GenerateHandler(handler.POSTGenerateImage))
 			r.Get("/generate/image/status/{id}", internal.GenerateHandler(handler.GETGenerateImageStatus))
+			r.Get("/buy-credits", internal.GenerateHandler(handler.HandleCreditsIndex))
 		})
 
 		r.Group(func(r chi.Router) {
