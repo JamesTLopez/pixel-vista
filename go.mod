@@ -16,6 +16,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/nedpals/supabase-go v0.4.0
 	github.com/replicate/replicate-go v0.23.0
+	github.com/stripe/stripe-go/v79 v79.10.0
 	github.com/uptrace/bun v1.2.1
 	github.com/uptrace/bun/dialect/pgdialect v1.2.1
 	github.com/uptrace/bun/extra/bundebug v1.2.1
