@@ -19,11 +19,6 @@ templ Navigation() {
 			if view.AuthenticatedUser(ctx).LoggedIn {
 				<ul class="menu menu-horizontal px-1 justify-center items-center gap-2">
 					<li>
-						<a href="/generate" class="btn btn-outline btn-accent ">
-							<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Art
-						</a>
-					</li>
-					<li>
 						<details>
 							<summary>
 								<div class="avatar">
@@ -31,6 +26,7 @@ templ Navigation() {
 										<img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"/>
 									</div>
 								</div>
+								<h2 class="font-medium">{ view.AuthenticatedUser(ctx).Username }</h2>
 							</summary>
 							<ul class="bg-base-100 rounded-t-none p-2">
 								<li><a href="/settings">Settings</a></li>

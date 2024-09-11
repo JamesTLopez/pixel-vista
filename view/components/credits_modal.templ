@@ -7,7 +7,8 @@ templ CreditsModal(creditsNeed int, userCredit int) {
 		<div class="modal-box">
 			<h3 class="text-lg">Please buy more credits to keep using our service!</h3>
 			<p>You have { strconv.Itoa(userCredit) } but need { strconv.Itoa(creditsNeed) }</p>
-			<div class="modal-action">
+			<div class="flex mt-6 justify-between">
+				<a href="/buy-credits" class="btn">Buy Credits</a>
 				<form method="dialog">
 					<button class="btn">Close</button>
 				</form>
