@@ -1,6 +1,7 @@
 package credits
 
 import (
+	"fmt"
 	"pixelvista/types"
 	"pixelvista/view/layout"
 )
@@ -12,7 +13,7 @@ templ CreditsIndex(prices []types.CreditPrice) {
 				<h1 class="font-semibold text-2xl">Choose how many credits you need!</h1>
 				<div class="flex gap-5">
 					for _,price := range prices {
-						<div class="card bg-base-200 w-48 rounded-lg">
+						<div hx-get={ fmt.Sprintf("/checkout/create/%s", price.ProductId) } class="card bg-base-200 w-48 rounded-lg">
 							<div class="card-body items-center text-center">
 								<h2 class="card-title">{ price.Name }</h2>
 								<h4>${ price.Price } CAD</h4>

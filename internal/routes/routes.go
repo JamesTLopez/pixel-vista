@@ -47,6 +47,8 @@ func InitRoutes(FS embed.FS) http.Handler {
 		r.Post("/logout", internal.GenerateHandler(handler.Logout))
 		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
 		r.Post("/replicate/callback/{userID}/{batchID}", internal.GenerateHandler(handler.ReplicateCallback))
+		r.Get("/checkout/success", internal.GenerateHandler(handler.StripeCheckoutSuccess))
+		r.Get("/checkout/cancel", internal.GenerateHandler(handler.StripeCheckoutCancel))
 
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.WithAccountSetup)
@@ -61,6 +63,8 @@ func InitRoutes(FS embed.FS) http.Handler {
 			r.Post("/generate", internal.GenerateHandler(handler.POSTGenerateImage))
 			r.Get("/generate/image/status/{id}", internal.GenerateHandler(handler.GETGenerateImageStatus))
 			r.Get("/buy-credits", internal.GenerateHandler(handler.HandleCreditsIndex))
+			r.Get("/checkout/create/{productID}", internal.GenerateHandler(handler.StripeCheckout))
+
 		})
 
 		r.Group(func(r chi.Router) {

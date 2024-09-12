@@ -68,7 +68,7 @@ func GetImagesByBatchID(batchID uuid.UUID) ([]types.Image, error) {
 func GetCreditPrices() ([]types.CreditPrice, error) {
 	var creditPrice []types.CreditPrice
 
-	err := Bun.NewSelect().Model(&creditPrice).Scan(context.Background())
+	err := Bun.NewSelect().Model(&creditPrice).Order("created_at ASC").Scan(context.Background())
 
 	return creditPrice, err
 }
