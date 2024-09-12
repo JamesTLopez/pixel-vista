@@ -1,34 +1,11 @@
 package credits
 
-import "pixelvista/view/layout"
+import (
+	"pixelvista/types"
+	"pixelvista/view/layout"
+)
 
-type CreditPrice struct {
-	Credits   string
-	Price     string
-	Currency  string
-	ProductID string
-}
-
-var prices = []CreditPrice{
-	{
-		Credits:   "100",
-		Price:     "9.99",
-		Currency:  "USD",
-		ProductID: "",
-	}, {
-		Credits:   "250",
-		Price:     "15.99",
-		Currency:  "USD",
-		ProductID: "",
-	}, {
-		Credits:   "500",
-		Price:     "29.99",
-		Currency:  "USD",
-		ProductID: "",
-	},
-}
-
-templ CreditsIndex() {
+templ CreditsIndex(prices []types.CreditPrice) {
 	@layout.App(true) {
 		@layout.Wrapper() {
 			<div class="flex flex-col items-center gap-16 mt-8">
@@ -37,8 +14,8 @@ templ CreditsIndex() {
 					for _,price := range prices {
 						<div class="card bg-base-200 w-48 rounded-lg">
 							<div class="card-body items-center text-center">
-								<h2 class="card-title">{ price.Credits }</h2>
-								<h4>${ price.Price } { price.Currency }</h4>
+								<h2 class="card-title">{ price.Name }</h2>
+								<h4>${ price.Price } CAD</h4>
 								<div class="card-actions">
 									<button class="btn btn-primary">Buy Now</button>
 								</div>

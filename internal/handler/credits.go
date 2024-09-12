@@ -3,6 +3,8 @@ package handler
 import (
 	"net/http"
 	"os"
+	"pixelvista/db"
+	"pixelvista/types"
 	"pixelvista/view/pages/credits"
 
 	"github.com/stripe/stripe-go/v79"
@@ -11,7 +13,13 @@ import (
 
 func HandleCreditsIndex(w http.ResponseWriter, r *http.Request) error {
 
-	return renderComponent(w, r, credits.CreditsIndex())
+	prices, err := db.GetCreditPrices()
+
+	if err != nil {
+		return renderComponent(w, r, credits.CreditsIndex([]types.CreditPrice{}))
+	}
+
+	return renderComponent(w, r, credits.CreditsIndex(prices))
 }
 
 func StripeCheckout(w http.ResponseWriter, r *http.Request) error {

@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS credit_price;
+DROP TABLE IF EXISTS credit_prices;
