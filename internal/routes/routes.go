@@ -22,9 +22,6 @@ func InitRoutes(FS embed.FS) http.Handler {
 	router.Use(chiMiddle.Recoverer)
 	router.Use(session.SessionManager.LoadAndSave)
 
-	// Custom middleware
-	router.Use(middleware.WithUser)
-
 	allowed_origins := os.Getenv("ALLOWED_ORIGINS")
 
 	origins := strings.Split(allowed_origins, ",")
@@ -37,41 +34,38 @@ func InitRoutes(FS embed.FS) http.Handler {
 		MaxAge:           3000,
 	}))
 
+	// Custom middleware
+	router.Use(middleware.WithUser)
+
 	// Allow styles in the public folder to be served
 	router.Handle("/*", http.StripPrefix("/", http.FileServer(http.FS(FS))))
 
+	router.Get("/", internal.GenerateHandler(handler.HandleHomeIndex)) // Maybe ?
+	router.Get("/login", internal.GenerateHandler(handler.HandlerSigninIndex))
+	router.Get("/login/provider/google", internal.GenerateHandler(handler.HandleLoginGoogleIndex))
+	router.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
+	router.Post("/logout", internal.GenerateHandler(handler.Logout))
+	router.Post("/login", internal.GenerateHandler(handler.LoginCreate))
+	router.Post("/replicate/callback/{userID}/{batchID}", internal.GenerateHandler(handler.ReplicateCallback))
+
 	router.Group(func(r chi.Router) {
-		r.Get("/login", internal.GenerateHandler(handler.HandlerSigninIndex))
-		r.Get("/login/provider/google", internal.GenerateHandler(handler.HandleLoginGoogleIndex))
-		r.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
-		r.Post("/logout", internal.GenerateHandler(handler.Logout))
-		r.Post("/login", internal.GenerateHandler(handler.LoginCreate))
-		r.Post("/replicate/callback/{userID}/{batchID}", internal.GenerateHandler(handler.ReplicateCallback))
-		r.Get("/checkout/success", internal.GenerateHandler(handler.StripeCheckoutSuccess))
+		r.Use(middleware.WithAuth, middleware.WithAccountSetup)
+		r.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
+		r.Put("/settings/account/profile", internal.GenerateHandler(handler.HandleSettingsProfileUpdate))
+		r.Get("/generate", internal.GenerateHandler(handler.HandleGenerateIndex))
+		r.Post("/generate", internal.GenerateHandler(handler.POSTGenerateImage))
+		r.Get("/generate/image/status/{id}", internal.GenerateHandler(handler.GETGenerateImageStatus))
+		r.Get("/buy-credits", internal.GenerateHandler(handler.HandleCreditsIndex))
+		r.Get("/checkout/create/{productID}", internal.GenerateHandler(handler.StripeCheckout))
+		r.Get("/checkout/success/{sessionID}", internal.GenerateHandler(handler.StripeCheckoutSuccess))
 		r.Get("/checkout/cancel", internal.GenerateHandler(handler.StripeCheckoutCancel))
 
-		r.Group(func(r chi.Router) {
-			r.Use(middleware.WithAccountSetup)
-			r.Get("/", internal.GenerateHandler(handler.HandleHomeIndex)) // Maybe ?
-		})
+	})
 
-		r.Group(func(r chi.Router) {
-			r.Use(middleware.WithAccountSetup, middleware.WithAuth)
-			r.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
-			r.Put("/settings/account/profile", internal.GenerateHandler(handler.HandleSettingsProfileUpdate))
-			r.Get("/generate", internal.GenerateHandler(handler.HandleGenerateIndex))
-			r.Post("/generate", internal.GenerateHandler(handler.POSTGenerateImage))
-			r.Get("/generate/image/status/{id}", internal.GenerateHandler(handler.GETGenerateImageStatus))
-			r.Get("/buy-credits", internal.GenerateHandler(handler.HandleCreditsIndex))
-			r.Get("/checkout/create/{productID}", internal.GenerateHandler(handler.StripeCheckout))
-
-		})
-
-		r.Group(func(r chi.Router) {
-			r.Use(middleware.WithAuth)
-			r.Post("/account/setup", internal.GenerateHandler(handler.SetupAccountCreate))
-			r.Get("/account/setup", internal.GenerateHandler(handler.HandlerAccountIndex))
-		})
+	router.Group(func(r chi.Router) {
+		r.Use(middleware.WithAuth)
+		r.Post("/account/setup", internal.GenerateHandler(handler.SetupAccountCreate))
+		r.Get("/account/setup", internal.GenerateHandler(handler.HandlerAccountIndex))
 	})
 	return router
 }
