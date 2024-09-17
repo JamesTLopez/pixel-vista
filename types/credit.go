@@ -9,5 +9,6 @@ type CreditPrice struct {
 	ProductId string
 	Name      string
 	Price     string
+	Credits   int
 	CreatedAt time.Time `bun:"default:'now()'"`
 }

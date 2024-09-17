@@ -72,3 +72,11 @@ func GetCreditPrices() ([]types.CreditPrice, error) {
 
 	return creditPrice, err
 }
+
+func GetCreditPriceByID(productID string) (types.CreditPrice, error) {
+	var price types.CreditPrice
+
+	err := Bun.NewSelect().Model(&price).Where("product_id = ?", productID).Scan(context.Background())
+
+	return price, err
+}

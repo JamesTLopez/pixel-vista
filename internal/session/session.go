@@ -15,9 +15,9 @@ func InitSession() {
 	SessionManager.Lifetime = 24 * time.Hour
 	SessionManager.IdleTimeout = 20 * time.Minute
 	SessionManager.Cookie.Name = "pixel_vista"
-	SessionManager.Cookie.HttpOnly = true
-	SessionManager.Cookie.Path = "/"
-	SessionManager.Cookie.Persist = true
-	SessionManager.Cookie.SameSite = http.SameSiteStrictMode
-	SessionManager.Cookie.Secure = true
+	// SessionManager.Cookie.HttpOnly = true
+	// SessionManager.Cookie.Path = "/"
+	// SessionManager.Cookie.Persist = true
+	SessionManager.Cookie.SameSite = http.SameSiteLaxMode
+	// SessionManager.Cookie.Secure = true
 }

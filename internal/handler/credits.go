@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"pixelvista/db"
+	"pixelvista/internal"
 	"pixelvista/types"
 	"pixelvista/view/pages/credits"
 
@@ -44,11 +46,50 @@ func StripeCheckout(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	hxRedirect(w, r, s.URL)
-	return nil
+	return hxRedirect(w, r, s.URL)
 }
 
 func StripeCheckoutSuccess(w http.ResponseWriter, r *http.Request) error {
+	user := internal.GetAuthenticatedUser(r)
+	sessionID := chi.URLParam(r, "sessionID")
+
+	_, err := session.Get(sessionID, nil)
+	if err != nil {
+		fmt.Println("prevent stripesession charge cause it failed")
+		return err
+	}
+
+	lineItems := session.ListLineItems(&stripe.CheckoutSessionListLineItemsParams{
+		Session: stripe.String(sessionID),
+	})
+
+	lineItems.Next()
+	currentItem := lineItems.LineItem()
+
+	priceID := currentItem.Price.ID
+
+	credits, err := db.GetCreditPriceByID(priceID)
+
+	if err != nil {
+		fmt.Println("prevent stripesession charge cause it failed")
+		return err
+	}
+	fmt.Println(priceID, credits.Credits)
+
+	if credits.Credits <= 0 {
+		fmt.Println("prevent stripesession charge cause it failed")
+		return nil
+	}
+
+	user.Account.Credits = credits.Credits
+
+	if err := db.UpdateProfile(&user.Account); err != nil {
+		fmt.Println("test------", err)
+		return err
+	}
+
+	hxRedirect(w, r, "/generate")
+
 	return nil
 }
 
