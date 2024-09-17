@@ -74,17 +74,15 @@ func StripeCheckoutSuccess(w http.ResponseWriter, r *http.Request) error {
 		fmt.Println("prevent stripesession charge cause it failed")
 		return err
 	}
-	fmt.Println(priceID, credits.Credits)
 
 	if credits.Credits <= 0 {
 		fmt.Println("prevent stripesession charge cause it failed")
 		return nil
 	}
 
-	user.Account.Credits = credits.Credits
+	user.Account.Credits += credits.Credits
 
 	if err := db.UpdateProfile(&user.Account); err != nil {
-		fmt.Println("test------", err)
 		return err
 	}
 
