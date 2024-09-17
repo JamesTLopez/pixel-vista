@@ -75,7 +75,10 @@ func POSTGenerateImage(w http.ResponseWriter, r *http.Request) error {
 		UserID:  user.ID,
 		BatchID: batchID,
 	}
-
+	user.Account.Credits -= creditsNeeded
+	if err := db.UpdateProfile(&user.Account); err != nil {
+		return err
+	}
 	if err := generateImage(r.Context(), genImageParams); err != nil {
 		return err
 	}
@@ -94,7 +97,7 @@ func POSTGenerateImage(w http.ResponseWriter, r *http.Request) error {
 				return err
 			}
 		}
-		// TODO: use hx-target instead of redirect on success
+
 		return hxRedirect(w, r, "/generate")
 	})
 
