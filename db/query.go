@@ -5,17 +5,18 @@ import (
 	"pixelvista/types"
 
 	"github.com/google/uuid"
+	"github.com/uptrace/bun"
 )
 
-func CreateImage(image *types.Image) error {
-	_, err := Bun.NewInsert().Model(image).Exec(context.Background())
+func CreateImage(bun bun.Tx, image *types.Image) error {
+	_, err := bun.NewInsert().Model(image).Exec(context.Background())
 
 	return err
 }
 
-func UpdateImage(image *types.Image) error {
+func UpdateImage(bun bun.Tx, image *types.Image) error {
 
-	_, err := Bun.NewUpdate().Model(image).WherePK().Exec(context.Background())
+	_, err := bun.NewUpdate().Model(image).WherePK().Exec(context.Background())
 
 	return err
 }

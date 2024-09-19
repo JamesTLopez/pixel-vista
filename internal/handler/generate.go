@@ -93,7 +93,7 @@ func POSTGenerateImage(w http.ResponseWriter, r *http.Request) error {
 				BatchID: batchID,
 			}
 
-			if err := db.CreateImage(&img); err != nil {
+			if err := db.CreateImage(tx, &img); err != nil {
 				return err
 			}
 		}

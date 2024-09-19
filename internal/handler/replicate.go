@@ -56,7 +56,7 @@ func ReplicateCallback(w http.ResponseWriter, r *http.Request) error {
 			images[i].Status = types.ImageStatusCompleted
 			images[i].ImageUrl = imageURl
 			images[i].Prompt = resp.Input.Prompt
-			if err := db.UpdateImage(&images[i]); err != nil {
+			if err := db.UpdateImage(tx, &images[i]); err != nil {
 				return err
 			}
 		}
