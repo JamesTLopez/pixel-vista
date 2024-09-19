@@ -40,7 +40,6 @@ func InitRoutes(FS embed.FS) http.Handler {
 	// Allow styles in the public folder to be served
 	router.Handle("/*", http.StripPrefix("/", http.FileServer(http.FS(FS))))
 
-	router.Get("/", internal.GenerateHandler(handler.HandleHomeIndex)) // Maybe ?
 	router.Get("/login", internal.GenerateHandler(handler.HandlerSigninIndex))
 	router.Get("/login/provider/google", internal.GenerateHandler(handler.HandleLoginGoogleIndex))
 	router.Get("/auth/callback", internal.GenerateHandler(handler.HandlerAuthCallback))
@@ -50,6 +49,7 @@ func InitRoutes(FS embed.FS) http.Handler {
 
 	router.Group(func(r chi.Router) {
 		r.Use(middleware.WithAuth, middleware.WithAccountSetup)
+		r.Get("/", internal.GenerateHandler(handler.HandleHomeIndex)) // Maybe ?
 		r.Get("/settings", internal.GenerateHandler(handler.HandleSettingsIndex))
 		r.Put("/settings/account/profile", internal.GenerateHandler(handler.HandleSettingsProfileUpdate))
 		r.Get("/generate", internal.GenerateHandler(handler.HandleGenerateIndex))
