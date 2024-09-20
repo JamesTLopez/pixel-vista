@@ -22,9 +22,9 @@ templ SettingsIndex(user types.AuthenticatedUser) {
 						<div class="col-span-1">
 							{ strconv.Itoa(user.Credits) }
 						</div>
-						<div class="col-span-1 ml-auto">
+						<a href="/buy-credits" class="col-span-1 ml-auto">
 							<button class="btn min-w-[120px] btn-accent text-base-100">Buy Credits</button>
-						</div>
+						</a>
 					</div>
 				</div>
 			</div>

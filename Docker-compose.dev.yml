@@ -8,12 +8,16 @@ services:
       - 3000:3000
     volumes:
       - .:/app
+    depends_on:
+      - ngrok
   ngrok:
     container_name: ngrok
     image: ngrok/ngrok:latest
     command:
       - "http"
       - "http://host.docker.internal:3000"
+      - "--url"
+      - ${WEBHOOK}
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
     ports:
