@@ -6,7 +6,7 @@ tmp_dir = "tmp"
   cmd = "templ generate && npx tailwindcss -i view/css/input.css -o public/styles.css && go build -tags dev -o ./tmp/main ."
 	
   delay = 20
-  exclude_dir = ["assets", "tmp", "vendor"]
+  exclude_dir = ["assets", "tmp", "vendor","node_modules"]
   exclude_file = []
   exclude_regex = [".*_templ.go"]
   exclude_unchanged = false
